@@ -106,7 +106,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   </a>
   <div class="nav-right">
     <a href="track-record.html" class="nav-link active">Track Record</a>
-    <a href="login.html" class="nav-btn">Sign In</a>
+    <a href="dashboard.html" class="nav-link" style="color:var(--amber)">Preview Dashboard</a><a href="dashboard.html" class="nav-link" style="color:var(--amber)">Preview Dashboard</a><a href="login.html" class="nav-btn">Sign In</a>
   </div>
 </nav>
 
@@ -115,18 +115,27 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   <div class="page-header">
     <div class="page-eyebrow">Live Performance</div>
     <h1 class="page-title">The track record<br>speaks for itself</h1>
-    <p class="page-sub">Every signal, every outcome — logged in real-time. No screenshots, no claims. Just auditable live data from a funded portfolio. We launch Sig5 publicly once we have a verified multi-month track record.</p>
-    <div class="verified-badge">✓ Live data · updated continuously</div>
+    <p class="page-sub">Built on 5 years of validated backtest data across 8 instruments. Live signals have been running since March 2026 — we publish the full live track record at launch. No screenshots, no claims. Auditable data only.</p>
+    <div class="verified-badge">✓ 5-year backtest validated · live signals accumulating</div>
   </div>
 
   <!-- STATS GRID -->
+  <!-- BACKTEST BANNER -->
+  <div style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.15);border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px">⏱️</span>
+    <div>
+      <span style="font-size:13px;font-weight:600;color:var(--amber)">Track record in progress · Live since March 19, 2026</span>
+      <span style="font-size:13px;color:var(--text2)"> — Statistics below are from a validated 5-year backtest. Live results are accumulating and will replace these figures at launch.</span>
+    </div>
+  </div>
+
   <div class="stats-grid">
-    <div class="stat-block"><div class="label">Live Win Rate</div><div class="value green">65.3%</div><div class="sub">32W / 17L resolved</div></div>
-    <div class="stat-block"><div class="label">Total Signals</div><div class="value">60</div><div class="sub">since Mar 19, 2026</div></div>
-    <div class="stat-block"><div class="label">Portfolio Size</div><div class="value">$600K</div><div class="sub">4 funded accounts</div></div>
-    <div class="stat-block"><div class="label">Max Drawdown <span class="tip-wrap"><span class="tip-icon">?</span><span class="tip-box">Based on ~1% risk per trade per instrument. Your actual DD will vary based on your position sizing.</span></span></div><div class="value">1.28%</div><div class="sub">total portfolio</div></div>
-    <div class="stat-block"><div class="label">Backtest WR</div><div class="value amber">67.6%</div><div class="sub">5yr validated</div></div>
-    <div class="stat-block"><div class="label">Live Since</div><div class="value" style="font-size:18px;color:var(--text2)">Mar 19</div><div class="sub">2026</div></div>
+    <div class="stat-block"><div class="label">Backtest Win Rate</div><div class="value green">67.6%</div><div class="sub">5yr · 8 instruments</div></div>
+    <div class="stat-block"><div class="label">Live Signals Logged</div><div class="value">60</div><div class="sub">since Mar 19, 2026</div></div>
+    <div class="stat-block"><div class="label">Live Win Rate</div><div class="value amber">65.3%</div><div class="sub">early sample · 49 resolved</div></div>
+    <div class="stat-block"><div class="label" style="display:flex;align-items:center;gap:4px">Backtest Max DD <span class="tip-wrap"><span class="tip-icon">?</span><span class="tip-box">Based on ~1% risk per trade per instrument. Your actual DD will vary based on your position sizing.</span></span></div><div class="value">2.92%</div><div class="sub">worst instrument</div></div>
+    <div class="stat-block"><div class="label">Backtest Return</div><div class="value green">+39.9%</div><div class="sub">per $100K · 5yr</div></div>
+    <div class="stat-block"><div class="label">Live Since</div><div class="value" style="font-size:18px;color:var(--text2)">Mar 2026</div><div class="sub">building track record</div></div>
   </div>
 
   <!-- LONG TERM CALLOUT -->
@@ -140,8 +149,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
 
   <!-- EQUITY CURVE -->
   <div class="chart-card">
-    <div class="chart-title">Portfolio Equity Curve</div>
-    <div class="chart-sub">Normalised to $100K base — March 19 to present</div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:4px">
+      <div>
+        <div class="chart-title">Strategy Equity Curve — 5 Year Backtest</div>
+        <div class="chart-sub">$100K base · Jan 2021 – Apr 2026 · 8 instruments combined · with DOM filter applied</div>
+      </div>
+      <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--amber);white-space:nowrap;flex-shrink:0">Backtest data — live track record in progress</div>
+    </div>
     <div class="equity-chart">
       <canvas id="equityCanvas"></canvas>
     </div>
@@ -166,40 +180,25 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
 
   <!-- MONTHLY RETURNS -->
   <div class="chart-card">
-    <div class="chart-title">Monthly Returns</div>
-    <div class="chart-sub">P&L as % of portfolio — no account names or balances shown</div>
+    <div class="chart-title">Annual Backtest Returns — Per Instrument</div>
+    <div class="chart-sub">$100K base per instrument · 5-year validated · DOM filter applied · <span style="color:var(--amber)">backtest data</span></div>
     <table class="returns-table">
       <thead>
         <tr>
-          <th>Month</th>
-          <th>Signals</th>
-          <th>Win Rate</th>
-          <th>Return</th>
-          <th><span class="tip-wrap">Max DD<span class="tip-icon">?</span><span class="tip-box">Monthly peak-to-trough drawdown based on ~1% risk per trade. Scale adjusts proportionally to your position sizing.</span></span></th>
+          <th>Instrument</th><th>Annual Return</th><th>Win Rate</th><th>Net Profit (5yr)</th>
+          <th><span class="tip-wrap">Max DD<span class="tip-icon">?</span><span class="tip-box">Based on ~1% risk per trade. Scales with your position sizing.</span></span></th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td style="font-weight:700;color:var(--text)">May 2026</td>
-          <td style="color:var(--text2)">4</td>
-          <td style="color:var(--text2)">50%</td>
-          <td><span class="ret-neg">-0.26%</span></td>
-          <td style="color:var(--text2)">0.39%</td>
-        </tr>
-        <tr>
-          <td style="font-weight:700;color:var(--text)">April 2026</td>
-          <td style="color:var(--text2)">38</td>
-          <td style="color:var(--text2)">66.7%</td>
-          <td><span class="ret-pos">+0.66%</span></td>
-          <td style="color:var(--text2)">1.28%</td>
-        </tr>
-        <tr>
-          <td style="font-weight:700;color:var(--text)">March 2026</td>
-          <td style="color:var(--text2)">18</td>
-          <td style="color:var(--text2)">61.1%</td>
-          <td><span class="ret_pos" style="color:var(--green);font-weight:700;font-family:'JetBrains Mono',monospace">+0.41%</span></td>
-          <td style="color:var(--text2)">0.86%</td>
-        </tr>
+        <tr><td style="font-weight:600;color:var(--text)">US30</td><td><span class="ret-pos">+$4,960/yr</span></td><td style="color:var(--text2)">75.1%</td><td><span class="ret-pos">+$18,787</span></td><td style="color:var(--text2)">1.08%</td></tr>
+        <tr><td style="font-weight:600;color:var(--text)">NAS100</td><td><span class="ret-pos">+$8,700/yr</span></td><td style="color:var(--text2)">75.4%</td><td><span class="ret-pos">+$43,504</span></td><td style="color:var(--text2)">1.79%</td></tr>
+        <tr><td style="font-weight:600;color:var(--text)">US500</td><td><span class="ret-pos">+$6,250/yr</span></td><td style="color:var(--text2)">69.9%</td><td><span class="ret-pos">+$37,496</span></td><td style="color:var(--text2)">2.92%</td></tr>
+        <tr><td style="font-weight:600;color:var(--text)">JPN225</td><td><span class="ret-pos">+$3,357/yr</span></td><td style="color:var(--text2)">67.4%</td><td><span class="ret-pos">+$16,786</span></td><td style="color:var(--text2)">1.87%</td></tr>
+        <tr><td style="font-weight:600;color:var(--text)">GER40</td><td><span class="ret-pos">+$5,442/yr</span></td><td style="color:var(--text2)">~65%</td><td><span class="ret-pos">+$27,211</span></td><td style="color:var(--text2)">—</td></tr>
+        <tr><td style="font-weight:600;color:var(--text)">BTCUSD</td><td><span class="ret-pos">+$3,029/yr</span></td><td style="color:var(--text2)">62.3%</td><td><span class="ret-pos">+$24,203</span></td><td style="color:var(--text2)">1.93%</td></tr>
+        <tr><td style="font-weight:600;color:var(--text)">XAUUSD</td><td><span class="ret-pos">+$2,223/yr</span></td><td style="color:var(--text2)">75.8%</td><td><span class="ret-pos">+$11,117</span></td><td style="color:var(--text2)">0.96%</td></tr>
+        <tr><td style="font-weight:600;color:var(--text)">XAGUSD</td><td><span class="ret-pos">+$3,307/yr</span></td><td style="color:var(--text2)">64.5%</td><td><span class="ret-pos">+$16,537</span></td><td style="color:var(--text2)">2.03%</td></tr>
+        <tr style="background:var(--surface2)"><td style="font-weight:700;color:var(--accent)">Combined</td><td><span class="ret-pos" style="font-size:15px">+$37,268/yr</span></td><td style="color:var(--green);font-weight:600">avg 69.4%</td><td><span class="ret-pos" style="font-size:15px">+$195,641</span></td><td style="color:var(--text2)">—</td></tr>
       </tbody>
     </table>
   </div>
@@ -222,6 +221,30 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
 
 </div>
 
+<div style="position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 24px;text-align:center;margin-bottom:0">
+  <div style="max-width:520px;margin:0 auto">
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:12px">Coming Q1 2027</div>
+    <h2 style="font-size:28px;font-weight:700;letter-spacing:-.5px;color:var(--text);margin-bottom:12px;line-height:1.2">Join the waitlist.<br>Be first when we launch.</h2>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.7">We're building the 6-month live track record before opening subscriptions. Join the waitlist and we'll email you the moment signups go live.</p>
+    <div style="display:flex;gap:10px;max-width:420px;margin:0 auto" id="trWaitlistRow">
+      <input type="email" id="trEmail" placeholder="your@email.com" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;outline:none"/>
+      <button onclick="submitTrWaitlist()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);border:none;border-radius:10px;padding:12px 22px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap">Notify Me</button>
+    </div>
+    <div id="trSuccess" style="display:none;color:var(--green);font-size:14px;font-weight:600;margin-top:14px">✓ You're on the list. We'll be in touch.</div>
+  </div>
+</div>
+<div style="position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 24px;text-align:center">
+  <div style="max-width:520px;margin:0 auto">
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:12px">Coming Q1 2027</div>
+    <h2 style="font-size:28px;font-weight:700;letter-spacing:-.5px;color:var(--text);margin-bottom:12px;line-height:1.2">Join the waitlist.<br>Be first when we launch.</h2>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.7">We're building the 6-month live track record before opening subscriptions. Join the waitlist and we'll email you the moment signups go live.</p>
+    <div style="display:flex;gap:10px;max-width:420px;margin:0 auto" id="trWaitlistRow">
+      <input type="email" id="trEmail" placeholder="your@email.com" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;outline:none"/>
+      <button onclick="submitTrWaitlist()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);border:none;border-radius:10px;padding:12px 22px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap">Notify Me</button>
+    </div>
+    <div id="trSuccess" style="display:none;color:var(--green);font-size:14px;font-weight:600;margin-top:14px">✓ You're on the list. We'll be in touch.</div>
+  </div>
+</div>
 <footer>
   <div class="footer-logo">SIG<span>5</span>.IO</div>
   <div class="footer-nav">
@@ -284,6 +307,18 @@ ctx.beginPath();ctx.arc(lastX,lastY,5,0,Math.PI*2);
 ctx.fillStyle='#38bdf8';ctx.fill();
 ctx.beginPath();ctx.arc(lastX,lastY,9,0,Math.PI*2);
 ctx.fillStyle='rgba(56,189,248,0.2)';ctx.fill();
+
+function submitTrWaitlist(){
+  const e=document.getElementById('trEmail');
+  if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return}
+  e.style.borderColor='var(--green)';
+  document.getElementById('trWaitlistRow').style.display='none';
+  document.getElementById('trSuccess').style.display='block';
+}
+document.getElementById('trEmail')?.addEventListener('keydown',function(e){if(e.key==='Enter')submitTrWaitlist()});
+
+function submitTrWaitlist(){const e=document.getElementById('trEmail');if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return}e.style.borderColor='var(--green)';document.getElementById('trWaitlistRow').style.display='none';document.getElementById('trSuccess').style.display='block';}
+document.getElementById('trEmail')?.addEventListener('keydown',function(e){if(e.key==='Enter')submitTrWaitlist()});
 </script>
 </body>
 </html>

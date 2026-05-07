@@ -127,8 +127,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   </a>
   <div class="nav-right">
     <a href="track-record.html" class="nav-link">Track Record</a>
-    <span class="nav-badge">COMING SOON</span>
-    <a href="login.html" class="nav-btn">Sign In</a>
+    <span class="nav-badge">Q1 2027</span>
+    <a href="dashboard.html" class="nav-link" style="color:var(--amber)">Preview Dashboard</a><a href="login.html" class="nav-btn">Sign In</a>
   </div>
 </nav>
 
@@ -142,7 +142,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   <p class="hero-sub">The exact signals running our live funded accounts — automated, verified, and delivered as JSON to any broker or copy trading service you choose.</p>
 
   <div class="waitlist-box">
-    <div class="waitlist-title">Join the waitlist — launching when ready</div>
+    <div class="waitlist-title">Join the waitlist — launching Q1 2027</div>
     <div class="waitlist-sub">Be first in line. No spam. One email when we go live.</div>
     <div class="input-row">
       <input class="waitlist-input" type="email" id="emailInput" placeholder="your@email.com"/>
@@ -153,7 +153,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   </div>
 
   <div class="countdown-wrap">
-    <div class="countdown-label">Estimated launch in — subject to track record milestone</div>
+    <div class="countdown-label">Estimated launch — Q1 2027</div>
     <div class="countdown">
       <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><span class="cd-label">Days</span></div>
       <span class="cd-sep">:</span>
@@ -247,7 +247,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
       <li><span class="check">✓</span> DOM filter — bad days blocked</li>
       <li><span class="check">✓</span> Keep 100% of your profits</li>
     </ul>
-    <button class="pricing-cta">Launching when ready — Join Waitlist ↑</button>
+    <button class="pricing-cta" onclick="document.getElementById('emailInput').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('emailInput').focus(),600)">Launching Q1 2027 — Join Waitlist ↑</button>
   </div>
 </section>
 
@@ -263,7 +263,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
 </footer>
 
 <script>
-function updateCountdown(){const t=new Date('2027-03-01T00:00:00'),n=new Date(),d=t-n;if(d<=0)return;document.getElementById('cd-days').textContent=String(Math.floor(d/86400000)).padStart(2,'0');document.getElementById('cd-hours').textContent=String(Math.floor(d%86400000/3600000)).padStart(2,'0');document.getElementById('cd-mins').textContent=String(Math.floor(d%3600000/60000)).padStart(2,'0');document.getElementById('cd-secs').textContent=String(Math.floor(d%60000/1000)).padStart(2,'0')}
+function updateCountdown(){const t=new Date('2027-01-01T00:00:00'),n=new Date(),d=t-n;if(d<=0)return;document.getElementById('cd-days').textContent=String(Math.floor(d/86400000)).padStart(2,'0');document.getElementById('cd-hours').textContent=String(Math.floor(d%86400000/3600000)).padStart(2,'0');document.getElementById('cd-mins').textContent=String(Math.floor(d%3600000/60000)).padStart(2,'0');document.getElementById('cd-secs').textContent=String(Math.floor(d%60000/1000)).padStart(2,'0')}
 setInterval(updateCountdown,1000);updateCountdown();
 let count=0;
 function submitWaitlist(){const e=document.getElementById('emailInput');if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return}e.style.borderColor='var(--green)';document.getElementById('successMsg').style.display='block';document.querySelector('.input-row').style.display='none';count++;document.getElementById('waitlistCount').textContent='Join '+count+' trader'+(count!==1?'s':'')+' already on the waitlist'}
