@@ -208,6 +208,48 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
     </div>
 
     <div class="settings-card">
+      <h3>Position Sizing</h3>
+      <div class="desc">Enter your account's maximum drawdown limit. This is used to automatically calculate position sizes for every signal.</div>
+
+      <!-- DD INPUT -->
+      <div class="field">
+        <label style="display:flex;align-items:center;gap:6px">
+          Account Drawdown Limit (USD)
+          <span style="position:relative;display:inline-flex;align-items:center">
+            <span style="width:15px;height:15px;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.25);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--accent);cursor:help" id="ddTipIcon">?</span>
+            <span id="ddTip" style="display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0c1e35;border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--text2);width:260px;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.4);line-height:1.6;font-weight:400;text-transform:none;letter-spacing:0">
+              We recommend accounts with a <strong style="color:var(--text)">static drawdown limit</strong> — a fixed dollar amount that never changes. Accounts with a trailing drawdown limit are not recommended as the effective DD shrinks as your balance grows, making volume calculations unreliable.
+            </span>
+          </span>
+        </label>
+        <input type="number" id="ddInput" placeholder="e.g. 10000" value="10000" min="100" step="100" style="font-family:'JetBrains Mono',monospace"/>
+        <div style="font-size:11px;color:var(--red);margin-top:6px;line-height:1.6">⚠️ Enter your account's <strong>actual</strong> maximum drawdown limit. Entering an inflated value will result in oversized positions and may breach your account rules. You are solely responsible for the accuracy of this figure.</div>
+      </div>
+
+      <!-- CURRENT RISK — READ ONLY -->
+      <div class="field">
+        <label style="display:flex;align-items:center;gap:6px">
+          Current Risk %
+          <span style="font-size:10px;font-weight:500;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.15);border-radius:6px;padding:2px 8px;color:var(--text3);letter-spacing:.3px;text-transform:none">System controlled</span>
+        </label>
+        <div style="position:relative">
+          <input type="text" value="1.00%" readonly style="font-family:'JetBrains Mono',monospace;background:rgba(30,58,95,.3);color:var(--text3);cursor:not-allowed;border-color:rgba(30,58,95,.5)"/>
+          <div style="position:absolute;inset:0;border-radius:10px;cursor:not-allowed"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;line-height:1.6">Risk % is managed automatically by the system. It decays 15% after each loss (floor 0.25%) and recovers 33% after each win (cap 1.0%). You cannot override this.</div>
+      </div>
+
+      <!-- DECAY LADDER VISUAL -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:20px">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:12px">Your Risk Ladder</div>
+        <div id="decayLadder"></div>
+      </div>
+
+      <button class="save-btn" onclick="saveSizing()">Save Drawdown Limit</button>
+      <span id="sizingConfirm" style="font-size:13px;color:var(--green);margin-left:14px;display:none">✓ Saved</span>
+    </div>
+
+    <div class="settings-card">
       <h3>Account</h3>
       <div class="desc">Update your login credentials.</div>
       <div class="field">
@@ -289,6 +331,47 @@ function saveWebhook(){
   const c=document.getElementById('saveConfirm');
   c.style.display='inline';
   setTimeout(()=>c.style.display='none',2500);
+}
+
+// DD tooltip toggle
+document.getElementById('ddTipIcon')?.addEventListener('mouseenter', () => {
+  document.getElementById('ddTip').style.display = 'block';
+});
+document.getElementById('ddTipIcon')?.addEventListener('mouseleave', () => {
+  document.getElementById('ddTip').style.display = 'none';
+});
+
+// Decay ladder renderer
+function renderDecayLadder(currentRisk) {
+  const levels = [];
+  let r = 1.0;
+  while (r > 0.25) {
+    levels.push(parseFloat(r.toFixed(4)));
+    r = Math.max(0.25, r * 0.85);
+    if (levels.length > 12) break;
+  }
+  levels.push(0.25);
+  const unique = [...new Set(levels.map(l => parseFloat(l.toFixed(2))))];
+  const el = document.getElementById('decayLadder');
+  if (!el) return;
+  el.innerHTML = unique.map(level => {
+    const isCurrent = Math.abs(level - currentRisk) < 0.02;
+    const pct = (level / 1.0) * 100;
+    return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${isCurrent?'var(--accent)':'var(--text3)'};width:42px;flex-shrink:0;font-weight:${isCurrent?'700':'400'}">${level.toFixed(2)}%</div>
+      <div style="flex:1;height:4px;background:rgba(30,58,95,.6);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${isCurrent?'var(--accent)':'rgba(30,58,95,.8)'};border-radius:2px"></div>
+      </div>
+      ${isCurrent?'<span style="font-size:10px;color:var(--accent);font-weight:700">← you</span>':''}
+    </div>`;
+  }).join('');
+}
+renderDecayLadder(1.0);
+
+function saveSizing() {
+  const c = document.getElementById('sizingConfirm');
+  c.style.display = 'inline';
+  setTimeout(() => c.style.display = 'none', 2500);
 }
 </script>
 </body>
