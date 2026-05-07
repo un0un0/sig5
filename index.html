@@ -217,6 +217,44 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
     <div class="feature-card"><div class="feature-icon">🛡️</div><h3>DOM filtered</h3><p>Every signal passes through Day-of-Month filters built from 5 years of backtest data. Bad calendar days are blocked automatically.</p></div>
   </div>
 
+  <!-- AUTO RISK MANAGEMENT MARKETING SECTION -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;margin-bottom:100px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--green))"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px;align-items:center">
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:12px">Built-in Risk Management</div>
+        <h2 style="font-size:clamp(22px,3.5vw,34px);font-weight:700;letter-spacing:-.5px;color:var(--text);line-height:1.2;margin-bottom:16px">Your position sizes<br>managed automatically</h2>
+        <p style="font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:28px">No other signal service does this. Every position is sized using your account's actual drawdown limit. After a loss, size automatically reduces. After a win, it recovers. The same battle-tested risk ladder running on our live portfolio — applied to yours.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="width:28px;height:28px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🎯</div>
+            <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px">Sized to your account</div><div style="font-size:13px;color:var(--text2)">Enter your drawdown limit once. Position sizes calculate automatically for every signal.</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="width:28px;height:28px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📉</div>
+            <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px">Decay on losses</div><div style="font-size:13px;color:var(--text2)">Position size reduces 15% after each loss — protecting your account during drawdown streaks.</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="width:28px;height:28px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📈</div>
+            <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px">Recovery on wins</div><div style="font-size:13px;color:var(--text2)">Recovers 33% after each win, naturally scaling back up as your account performs.</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="width:28px;height:28px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🛡️</div>
+            <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px">Hard floor at 0.25%</div><div style="font-size:13px;color:var(--text2)">Risk never drops below 0.25% — you stay in the game even during extended drawdown periods.</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- DECAY LADDER VISUAL -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:28px">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:20px">Risk Decay Ladder</div>
+        <div id="mktLadder"></div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--text3);line-height:1.6">Starting risk 1.0% · decays 15% per loss · recovers 33% per win · floor 0.25%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="section-label">Comparison</div>
   <h2 class="section-title">Sig5 vs the rest</h2>
   <p class="section-sub" style="margin-bottom:32px">Why automated webhook delivery changes everything.</p>
@@ -229,6 +267,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
       <tr><td>Track record</td><td class="no">Screenshots &amp; claims</td><td class="yes">Live auditable database</td></tr>
       <tr><td>Verified capital</td><td class="no">Usually unverified</td><td class="yes">Live $600K funded portfolio</td></tr>
       <tr><td>Pricing</td><td class="no">Often % of profits</td><td class="yes">$149/month flat</td></tr>
+      <tr><td>Risk management</td><td class="no">None — you manage it</td><td class="yes">Auto decay ladder built in</td></tr>
     </tbody>
   </table>
 
@@ -267,6 +306,25 @@ function updateCountdown(){const t=new Date('2027-01-01T00:00:00'),n=new Date(),
 setInterval(updateCountdown,1000);updateCountdown();
 let count=0;
 function submitWaitlist(){const e=document.getElementById('emailInput');if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return}e.style.borderColor='var(--green)';document.getElementById('successMsg').style.display='block';document.querySelector('.input-row').style.display='none';count++;document.getElementById('waitlistCount').textContent='Join '+count+' trader'+(count!==1?'s':'')+' already on the waitlist'}
+// Render marketing decay ladder
+(function(){
+  const levels=[];let r=1.0;
+  while(r>0.25&&levels.length<8){levels.push(parseFloat(r.toFixed(2)));r=Math.max(0.25,r*0.85);}
+  levels.push(0.25);
+  const el=document.getElementById('mktLadder');
+  if(!el)return;
+  el.innerHTML=levels.map((l,i)=>{
+    const isCurrent=i===0;
+    const pct=l/1.0*100;
+    return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+      +'<div style="font-family:monospace;font-size:12px;color:'+(isCurrent?'var(--accent)':'var(--text3)')+';width:44px;flex-shrink:0;font-weight:'+(isCurrent?700:400)+'">'+l.toFixed(2)+'%</div>'
+      +'<div style="flex:1;height:5px;background:rgba(30,58,95,.6);border-radius:3px;overflow:hidden">'
+      +'<div style="height:100%;width:'+pct+'%;background:'+(isCurrent?'linear-gradient(90deg,var(--accent),var(--green))':'rgba(30,58,95,.8)')+';border-radius:3px;transition:width .3s"></div></div>'
+      +(isCurrent?'<span style="font-size:10px;color:var(--accent);font-weight:700;white-space:nowrap">start</span>':'')
+      +'</div>';
+  }).join('');
+})();
+
 document.getElementById('emailInput').addEventListener('keydown',function(e){if(e.key==='Enter')submitWaitlist();this.style.borderColor='var(--border)'});
 </script>
 </body>
