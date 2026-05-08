@@ -95,7 +95,7 @@ section.content{position:relative;z-index:1;max-width:1100px;margin:0 auto;paddi
 .pricing-features li{font-size:14px;color:var(--text2);padding:10px 0;border-bottom:1px solid rgba(30,58,95,.5);display:flex;align-items:center;gap:10px}
 .pricing-features li:last-child{border-bottom:none}
 .check{color:var(--green);font-size:16px}
-.pricing-cta{width:100%;background:var(--surface2);color:var(--text3);border:none;border-radius:12px;padding:16px;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;cursor:default}
+.pricing-cta{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);border:none;border-radius:12px;padding:16px;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;display:block;text-align:center;transition:opacity .2s,transform .1s}.pricing-cta:hover{opacity:.9;transform:translateY(-1px)}
 footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40px 24px;text-align:center}
 .footer-logo{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:12px}
 .footer-logo span{color:var(--accent)}
@@ -317,7 +317,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
       <li><span class="check">✓</span> DOM filter — bad days blocked</li>
       <li><span class="check">✓</span> Keep 100% of your profits</li>
     </ul>
-    <button class="pricing-cta" onclick="document.getElementById('emailInput').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('emailInput').focus(),600)">Launching Q1 2027 — Join Waitlist ↑</button>
+    <a href="https://buy.stripe.com/test_cNicN5bK604c4AgdZFaVa00" class="pricing-cta" target="_blank">Subscribe — $149/month →</a>
   </div>
 </section>
 
