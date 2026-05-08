@@ -305,7 +305,17 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
 function updateCountdown(){const t=new Date('2027-01-01T00:00:00'),n=new Date(),d=t-n;if(d<=0)return;document.getElementById('cd-days').textContent=String(Math.floor(d/86400000)).padStart(2,'0');document.getElementById('cd-hours').textContent=String(Math.floor(d%86400000/3600000)).padStart(2,'0');document.getElementById('cd-mins').textContent=String(Math.floor(d%3600000/60000)).padStart(2,'0');document.getElementById('cd-secs').textContent=String(Math.floor(d%60000/1000)).padStart(2,'0')}
 setInterval(updateCountdown,1000);updateCountdown();
 let count=0;
-function submitWaitlist(){const e=document.getElementById('emailInput');if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return}e.style.borderColor='var(--green)';document.getElementById('successMsg').style.display='block';document.querySelector('.input-row').style.display='none';count++;document.getElementById('waitlistCount').textContent='Join '+count+' trader'+(count!==1?'s':'')+' already on the waitlist'}
+async function submitToSupabase(email, source) {
+  try {
+    const r = await fetch('https://hefsyjljufetlgnccdqf.supabase.co/rest/v1/waitlist', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZnN5amxqdWZldGxnbmNjZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDQ1OTIsImV4cCI6MjA4OTM4MDU5Mn0.zCsbFdWD1nMo-Czco5UaBgw7roliZQ3iQv4XVLDOtbs','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZnN5amxqdWZldGxnbmNjZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDQ1OTIsImV4cCI6MjA4OTM4MDU5Mn0.zCsbFdWD1nMo-Czco5UaBgw7roliZQ3iQv4XVLDOtbs','Prefer':'return=minimal'},
+      body: JSON.stringify({email, source})
+    });
+    return r.ok || r.status === 409;
+  } catch(e) { return false; }
+}
+async function submitWaitlist(){const e=document.getElementById('emailInput');if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return}await submitToSupabase(e.value,'index');e.style.borderColor='var(--green)';document.getElementById('successMsg').style.display='block';document.querySelector('.input-row').style.display='none';document.getElementById('waitlistCount').textContent="You're on the list!";}
 // Render marketing decay ladder
 (function(){
   const levels=[];let r=1.0;
