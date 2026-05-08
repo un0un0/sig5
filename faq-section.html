@@ -1,0 +1,502 @@
+<!-- ============================================================
+     SIG5.IO — FAQ SECTION
+     Drop this block into index.html where the FAQ should appear.
+     Fonts (Outfit + JetBrains Mono) and CSS variables assumed
+     to already be loaded by the parent page.
+     ============================================================ -->
+
+<section class="faq-section" id="faq">
+  <div class="faq-container">
+
+    <div class="faq-header">
+      <span class="faq-label">FAQ</span>
+      <h2 class="faq-title">Everything you need to know</h2>
+      <p class="faq-subtitle">Before you connect, before you subscribe.</p>
+    </div>
+
+    <div class="faq-groups">
+
+      <!-- GROUP: Getting Started -->
+      <div class="faq-group">
+        <div class="faq-group-label">Getting Started</div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What is Sig5 and how does it work?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Sig5 is an automated trading signal relay service. When a live signal fires on our trading system, it is instantly forwarded to your broker or copy tool via a JSON webhook POST request. You don't need to watch charts, read Telegram messages, or manually place trades — execution is fully automated from signal to broker.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What do I need to get started?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Three things: a broker or copy tool that accepts webhook POST requests, a webhook URL from that broker or tool, and your account's maximum drawdown limit in USD. That's it.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Is this compatible with my broker?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Sig5 delivers signals as a standard JSON webhook POST request. Any broker platform or copy trading tool that accepts incoming webhooks is compatible. Popular options include WebhookTrade, Copygram, and any broker running MT5 with a webhook plugin. If your platform accepts a webhook URL, it will work with Sig5.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can I use this with a funded account?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, provided your funding provider permits the use of third-party signal tools. It is your responsibility to verify this with your provider before subscribing. Sig5 does not interact with your account directly — it only sends signals to the webhook URL you provide.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GROUP: The Signals -->
+      <div class="faq-group">
+        <div class="faq-group-label">The Signals</div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What instruments do you trade?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Sig5 covers 8 instruments: US30, NAS100, US500, JPN225, GER40, BTCUSD, XAUUSD, and XAGUSD.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How many signals per day should I expect?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Signal frequency varies by market conditions. On active days you may see 2–4 signals across all instruments. There will also be days with no signals — the system only fires when a valid setup is confirmed.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What does a signal look like?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Every entry signal is delivered as a JSON payload to your webhook URL:</p>
+            <pre class="faq-code"><code>{
+  "id":     "A3F9C2-B7D-US30",
+  "ticker": "US30",
+  "action": "BUY",
+  "price":  40812,
+  "sl":     40512,
+  "volume": 0.33
+}</code></pre>
+            <p>When a trade closes, an exit signal is sent:</p>
+            <pre class="faq-code"><code>{
+  "id":     "A3F9C2-B7D-US30",
+  "ticker": "US30",
+  "action": "CLOSE"
+}</code></pre>
+            <p>The <code>id</code> field is unique per subscriber per signal. <code>volume</code> is your lot size, calculated automatically based on your drawdown limit and current risk level.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What time zones do signals fire in?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Signals can fire during any active market session — London, New York, and Asian sessions depending on the instrument. There is no fixed schedule; signals fire when the strategy conditions are met.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Do you trade during news events?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>High-impact news events are monitored in real time. Signals are blocked automatically during high-impact events within the relevant session window.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GROUP: Risk & Lot Sizing -->
+      <div class="faq-group">
+        <div class="faq-group-label">Risk &amp; Lot Sizing</div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How are my lot sizes calculated?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Your lot size is calculated from your drawdown limit and your current risk percentage:</p>
+            <pre class="faq-code"><code>risk_amount = drawdown_limit × (current_risk_pct / 100)
+lots        = risk_amount / stop_distance</code></pre>
+            <p>Example: $10,000 drawdown limit at 1.0% risk on a US30 long with a 300pt stop = 0.33 lots. Stop distances are fixed per instrument — your drawdown limit is the only input required.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What is the decay ladder?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>The decay ladder automatically adjusts your risk percentage after each trade outcome. After a loss, risk decays by 15%. After a win, it recovers by 33%. Risk is capped at 1.0% and never drops below 0.25% regardless of consecutive losses. This is the same risk system running on the live portfolio behind Sig5.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What drawdown limit should I enter?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Enter your account's maximum allowed drawdown in USD. For example, if you have a $100K account with a 10% maximum drawdown, enter <code>10000</code>. Do not inflate this figure — it directly controls your position sizing and an inflated value will produce oversized trades that may breach your account rules.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can I override the lot sizing?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>No. Lot sizes are calculated automatically by the system. Your current risk percentage is read-only and managed by the decay ladder. Your drawdown limit is the only value you control.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GROUP: Technical Setup -->
+      <div class="faq-group">
+        <div class="faq-group-label">Technical Setup</div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What is a webhook URL and where do I get one?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>A webhook URL is an endpoint provided by your broker or copy tool that listens for incoming trade instructions. You typically find it in your platform settings under something like "webhooks", "incoming signals", or "API integration". Refer to your platform's documentation for the exact location.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Which copy tools are compatible?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Any tool that accepts a JSON webhook POST request. WebhookTrade and Copygram are commonly used options, but any equivalent service works. Many brokers running MT5 also support webhook execution natively via plugins — check your broker's documentation. If your tool has a webhook input field, it is compatible with Sig5.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What happens if my webhook goes down when a signal fires?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Sig5 makes one delivery attempt per signal. If your webhook is unreachable, the signal will not be retried. It is your responsibility to ensure your webhook URL remains active and reachable. Delivery success is logged and visible in your dashboard.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GROUP: Billing -->
+      <div class="faq-group">
+        <div class="faq-group-label">Billing</div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How much does it cost?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>$149/month, flat fee. No profit sharing, no setup fees, no lock-in.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can I cancel anytime?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. Cancel anytime from your dashboard. Your subscription remains active until the end of the current billing period.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Is there a free trial?
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>There is no free trial, but you can join the waitlist to be notified at launch and follow our live track record on the Track Record page before committing.</p>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /.faq-groups -->
+  </div><!-- /.faq-container -->
+</section>
+
+<style>
+/* ── FAQ Section ─────────────────────────────────────────── */
+.faq-section {
+  padding: 100px 24px;
+  background: #080c10;
+  position: relative;
+}
+
+.faq-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
+
+.faq-container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* Header */
+.faq-header {
+  margin-bottom: 72px;
+}
+
+.faq-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: #4ade80;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.faq-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 600;
+  color: #f0f4f8;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.faq-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  color: #5a6a7a;
+  margin: 0;
+}
+
+/* Groups */
+.faq-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 52px;
+}
+
+.faq-group-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #2d4a6b;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #0f1e2e;
+}
+
+/* Items */
+.faq-item {
+  border-bottom: 1px solid #0f1e2e;
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #c8d8e8;
+  line-height: 1.4;
+  transition: color 0.2s;
+}
+
+.faq-question:hover {
+  color: #f0f4f8;
+}
+
+.faq-question[aria-expanded="true"] {
+  color: #f0f4f8;
+}
+
+/* Icon */
+.faq-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #1e3040;
+  position: relative;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.faq-icon::before,
+.faq-icon::after {
+  content: '';
+  position: absolute;
+  background: #5a7a9a;
+  transition: background 0.2s, transform 0.25s, opacity 0.25s;
+}
+
+.faq-icon::before {
+  width: 8px; height: 1.5px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.faq-icon::after {
+  width: 1.5px; height: 8px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.faq-question[aria-expanded="true"] .faq-icon {
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.08);
+}
+
+.faq-question[aria-expanded="true"] .faq-icon::before,
+.faq-question[aria-expanded="true"] .faq-icon::after {
+  background: #4ade80;
+}
+
+.faq-question[aria-expanded="true"] .faq-icon::after {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* Answer */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+  overflow: hidden;
+}
+
+.faq-answer.open {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer > * {
+  min-height: 0;
+}
+
+.faq-answer p {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #6a8aaa;
+  margin: 0 0 12px;
+  padding-bottom: 4px;
+}
+
+.faq-answer p:first-child {
+  padding-top: 0;
+}
+
+.faq-answer p:last-child {
+  margin-bottom: 20px;
+}
+
+.faq-answer code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.07);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* Code blocks */
+.faq-code {
+  background: #050810;
+  border: 1px solid #0f1e2e;
+  border-left: 2px solid #4ade80;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 4px 0 16px;
+  overflow-x: auto;
+}
+
+.faq-code code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #a8c8b8;
+  background: none;
+  padding: 0;
+  line-height: 1.8;
+  white-space: pre;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .faq-section {
+    padding: 72px 20px;
+  }
+  .faq-question {
+    font-size: 14px;
+  }
+}
+</style>
+
+<script>
+(function () {
+  const questions = document.querySelectorAll('.faq-question');
+
+  questions.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const answer = btn.nextElementSibling;
+
+      // Close all
+      questions.forEach(function (q) {
+        q.setAttribute('aria-expanded', 'false');
+        q.nextElementSibling.classList.remove('open');
+      });
+
+      // Toggle clicked
+      if (!expanded) {
+        btn.setAttribute('aria-expanded', 'true');
+        answer.classList.add('open');
+      }
+    });
+  });
+})();
+</script>
