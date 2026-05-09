@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — Sig5</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#060d1a;--surface:#0c1628;--surface2:#111f35;--border:#1e3a5f;--accent:#38bdf8;--accent2:#0ea5e9;--green:#34d399;--red:#f87171;--amber:#fbbf24;--text:#f1f5f9;--text2:#94a3b8;--text3:#4a6080}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh}
 .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(56,189,248,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
 nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,13,26,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(56,189,248,.08)}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
@@ -16,14 +16,14 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
 .logo-text span{color:var(--accent)}
 .nav-right{display:flex;align-items:center;gap:16px}
 .nav-tabs{display:flex;gap:4px}
-.nav-tab{font-size:13px;font-weight:600;color:var(--text3);text-decoration:none;padding:6px 14px;border-radius:8px;transition:all .2s;cursor:pointer;border:none;background:none;font-family:'Outfit',sans-serif}
+.nav-tab{font-size:13px;font-weight:600;color:var(--text3);text-decoration:none;padding:6px 14px;border-radius:8px;transition:all .2s;cursor:pointer;border:none;background:none;font-family:'Space Grotesk',sans-serif}
 .nav-tab:hover{color:var(--text2);background:rgba(56,189,248,.06)}
 .nav-tab.active{color:var(--accent);background:rgba(56,189,248,.1)}
 .user-pill{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:6px 14px}
 .user-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .user-email{font-size:12px;font-weight:600;color:var(--text2)}
-.signout-btn{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s;cursor:pointer;border:none;background:none;font-family:'Outfit',sans-serif}
+.signout-btn{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s;cursor:pointer;border:none;background:none;font-family:'Space Grotesk',sans-serif}
 .signout-btn:hover{color:var(--red)}
 .main{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:32px 24px}
 .page{display:none}
@@ -77,10 +77,10 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
 .field input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:border-color .2s}
 .field input:focus{border-color:var(--accent)}
 .field .hint{font-size:11px;color:var(--text3);margin-top:6px}
-.save-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);border:none;border-radius:10px;padding:11px 24px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.save-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);border:none;border-radius:10px;padding:11px 24px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
 .save-btn:hover{opacity:.9}
 .danger-zone{border-color:rgba(248,113,113,.2)}
-.danger-btn{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:11px 24px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.danger-btn{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:11px 24px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
 .danger-btn:hover{background:rgba(248,113,113,.2)}
 .plan-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--accent);margin-bottom:16px}
 </style>
