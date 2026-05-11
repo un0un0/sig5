@@ -330,9 +330,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
         <div class="t-comment">// Signal fired on our accounts 09:41 EST</div>
         <br>
         <div><span class="t-punc">{</span></div>
+        <div>&nbsp;&nbsp;<span class="t-key">"schemaVersion"</span><span class="t-punc">:</span> <span class="t-str">"1.0"</span><span class="t-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="t-key">"id"</span><span class="t-punc">:</span> <span class="t-str">"000162-B6D-US30"</span><span class="t-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="t-key">"ticker"</span><span class="t-punc">:</span> <span class="t-str">"US30"</span><span class="t-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="t-key">"action"</span><span class="t-punc">:</span> <span class="t-str">"BUY"</span><span class="t-punc">,</span></div>
+        <div>&nbsp;&nbsp;<span class="t-key">"orderType"</span><span class="t-punc">:</span> <span class="t-str">"market"</span><span class="t-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="t-key">"price"</span><span class="t-punc">:</span> <span class="t-num">40812</span><span class="t-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="t-key">"sl"</span><span class="t-punc">:</span> <span class="t-num">40512</span><span class="t-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="t-key">"tp"</span><span class="t-punc">:</span> <span class="t-num">41112</span><span class="t-punc">,</span></div>
@@ -388,7 +390,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
     <div class="step">
       <span class="step-num">01 — Subscribe</span>
       <h3>Sign up and connect</h3>
-      <p>$149/month flat. No profit sharing, no account access required. Paste your webhook URL into your dashboard and you're live.</p>
+      <p>$149/month founding rate — locked for life. No profit sharing, no account access required. Paste your webhook URL into your dashboard and you're live.</p>
     </div>
     <div class="step">
       <span class="step-num">02 — Set your risk</span>
@@ -480,7 +482,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
       <tr><td>Broker choice</td><td class="no">Often locked to one broker</td><td class="yes">Any broker or copier</td></tr>
       <tr><td>Track record</td><td class="no">Screenshots &amp; claims</td><td class="yes">Live auditable database</td></tr>
       <tr><td>Verified capital</td><td class="no">Usually unverified</td><td class="yes">Live $600K portfolio</td></tr>
-      <tr><td>Pricing</td><td class="no">Often % of profits</td><td class="yes">$149/month flat</td></tr>
+      <tr><td>Pricing</td><td class="no">Often % of profits</td><td class="yes">$149/month — founding rate</td></tr>
       <tr><td>Risk management</td><td class="no">You manage it</td><td class="yes">Auto decay ladder built in</td></tr>
     </tbody>
   </table>
@@ -489,9 +491,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
   <h2 class="section-title" style="text-align:center">Simple. Flat.<br>No surprises.</h2>
   <p class="section-sub" style="text-align:center;margin:0 auto 44px">One tier. One price. Keep 100% of your profits.</p>
   <div class="pricing-card">
-    <span class="pricing-badge">Monthly Subscription</span>
+    <span class="pricing-badge">Founding Member — Phase 1</span>
     <div class="pricing-price"><sup>$</sup>149</div>
-    <div class="pricing-period">/ month &nbsp;·&nbsp; cancel anytime</div>
+    <div class="pricing-period">/ month &nbsp;·&nbsp; locked for life &nbsp;·&nbsp; cancel anytime</div>
     <ul class="pricing-features">
       <li><span class="check">✓</span> All 8 instrument signals</li>
       <li><span class="check">✓</span> Automated webhook delivery</li>
@@ -499,8 +501,37 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
       <li><span class="check">✓</span> Live signal dashboard</li>
       <li><span class="check">✓</span> DOM filter — bad days blocked</li>
       <li><span class="check">✓</span> Keep 100% of your profits</li>
+      <li><span class="check">✓</span> Price locked forever — never increases</li>
     </ul>
-    <a href="https://buy.stripe.com/test_cNicN5bK604c4AgdZFaVa00" class="pricing-cta" target="_blank">Subscribe — $149/month →</a>
+    <a href="https://buy.stripe.com/test_cNicN5bK604c4AgdZFaVa00" class="pricing-cta" target="_blank">Join Founding Cohort — $149/month →</a>
+
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(56,189,248,.1)">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:14px">Pricing Roadmap</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;box-shadow:0 0 6px var(--accent)"></span>
+            <span style="font-size:13px;font-weight:600;color:var(--text)">Phase 1 — Founding 200</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--accent)">$149/mo</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;opacity:.5">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:8px;height:8px;border-radius:50%;background:var(--text3);display:inline-block"></span>
+            <span style="font-size:13px;color:var(--text2)">Phase 2 — Next 100</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text2)">$199/mo</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;opacity:.5">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:8px;height:8px;border-radius:50%;background:var(--text3);display:inline-block"></span>
+            <span style="font-size:13px;color:var(--text2)">Phase 3 — Final 200</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text2)">$249–299/mo</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--text3);line-height:1.6">Capacity capped at ~500 users total. Founding members lock $149 forever. Later cohorts open at higher prices as the track record matures.</div>
+    </div>
   </div>
 
 </section>
@@ -1007,7 +1038,7 @@ lots        = risk_amount / stop_distance</code></pre>
             <span class="faq-icon"></span>
           </button>
           <div class="faq-answer">
-            <p>$149/month, flat fee. No profit sharing, no setup fees, no lock-in.</p>
+            <p>$149/month for founding members — this price is locked for life as long as you remain subscribed. Capacity is capped at 200 founding members. Later cohorts open at $199 and $249–299 as the track record matures. No profit sharing, no setup fees, no lock-in.</p>
           </div>
         </div>
 
