@@ -335,6 +335,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
         <div>&nbsp;&nbsp;<span class="t-key">"action"</span><span class="t-punc">:</span> <span class="t-str">"BUY"</span><span class="t-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="t-key">"price"</span><span class="t-punc">:</span> <span class="t-num">40812</span><span class="t-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="t-key">"sl"</span><span class="t-punc">:</span> <span class="t-num">40512</span><span class="t-punc">,</span></div>
+        <div>&nbsp;&nbsp;<span class="t-key">"tp"</span><span class="t-punc">:</span> <span class="t-num">41112</span><span class="t-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="t-key">"volume"</span><span class="t-punc">:</span> <span class="t-num">0.33</span></div>
         <div><span class="t-punc">}</span></div>
         <div class="signal-row">
@@ -761,7 +762,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
             <span class="faq-icon"></span>
           </button>
           <div class="faq-answer">
-            <p>The Sig5 Model is a systematic, rules-based strategy built around trend following and range breakout principles. It identifies high-probability entries at key structural levels when price momentum and direction align across a session window. There is no discretion involved — every signal is generated and executed by the same rules, every time.</p>
+            <p>The Sig5 Model is a systematic, rules-based strategy built around trend following and range breakout principles. It identifies high-probability entries at key structural levels when price momentum and direction align across a session window. Once in a trade, a trailing stop activates after a defined profit threshold is reached — locking in gains and acting as the primary exit trigger. There is no discretion involved — every signal is generated and executed by the same rules, every time.</p>
           </div>
         </div>
 
@@ -879,15 +880,16 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
   "action": "BUY",
   "price":  40812,
   "sl":     40512,
+  "tp":     41112,
   "volume": 0.33
 }</code></pre>
-            <p>When a trade closes, an exit signal is sent:</p>
+            <p>When a trade closes — whether via take profit, trailing stop, or time stop — an exit signal is sent:</p>
             <pre class="faq-code"><code>{
   "id":     "A3F9C2-B7D-US30",
   "ticker": "US30",
   "action": "CLOSE"
 }</code></pre>
-            <p>The <code>id</code> field is unique per subscriber per signal. <code>volume</code> is your lot size, calculated automatically based on your drawdown limit and current risk level.</p>
+            <p>The <code>id</code> field matches the entry signal so your execution tool can close the correct position. <code>volume</code> is your lot size, calculated automatically based on your drawdown limit and current risk level.</p>
           </div>
         </div>
 
