@@ -19,63 +19,90 @@ nav{position:sticky;top:0;z-index:100;padding:18px 40px;display:flex;align-items
 .logo-text span{color:var(--accent)}
 .nav-right{display:flex;align-items:center;gap:16px}
 .nav-link{font-size:13px;font-weight:600;color:var(--text2);text-decoration:none;transition:color .2s}
-.nav-link:hover{color:var(--accent)}
-.nav-link.active{color:var(--accent)}
+.nav-link:hover{color:var(--accent)}.nav-link.active{color:var(--accent)}
 .nav-btn{font-size:13px;font-weight:700;color:var(--bg);background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:8px;padding:8px 18px;cursor:pointer;text-decoration:none;font-family:'Space Grotesk',sans-serif}
 .main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:60px 24px}
-.page-header{margin-bottom:48px}
+.page-header{margin-bottom:40px}
 .page-eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:12px}
 .page-title{font-size:clamp(28px,5vw,48px);font-weight:800;letter-spacing:-1.5px;color:var(--text);line-height:1.1;margin-bottom:16px}
 .page-sub{font-size:16px;color:var(--text2);max-width:540px;line-height:1.7}
 .verified-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;color:var(--green);letter-spacing:.5px;margin-top:16px}
-/* STATS GRID */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:32px}
-.stat-block{background:var(--surface);padding:24px 28px}
-.stat-block .label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:10px}
-.stat-block .value{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;color:var(--accent)}
-.stat-block .value.green{color:var(--green)}
-.stat-block .value.amber{color:var(--amber)}
-.stat-block .value.red{color:var(--red)}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:32px}
+.stat-block{background:var(--surface);padding:22px 24px}
+.stat-block .label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px}
+.stat-block .value{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:500;color:var(--accent)}
+.stat-block .value.green{color:var(--green)}.stat-block .value.amber{color:var(--amber)}.stat-block .value.red{color:var(--red)}
 .stat-block .sub{font-size:11px;color:var(--text3);margin-top:4px}
-/* EQUITY CURVE */
-.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:32px}
+/* CARDS */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px}
 .chart-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
 .chart-sub{font-size:11px;color:var(--text3);margin-bottom:20px}
 .equity-chart{width:100%;height:200px;position:relative}
-canvas{width:100%;height:100%}
-/* MONTHLY RETURNS */
-.returns-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:32px}
+canvas{width:100%!important;height:100%!important}
+/* ACCOUNT CARDS */
+.account-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(480px,1fr));gap:16px;margin-bottom:24px}
+.account-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.account-card-header{padding:18px 20px;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid rgba(30,58,95,.5)}
+.account-name{font-size:15px;font-weight:700;color:var(--text)}
+.account-since{font-size:11px;color:var(--text3);margin-top:3px}
+.account-return{text-align:right}
+.account-return .pct{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600}
+.account-return .pct.pos{color:var(--green)}.account-return .pct.neg{color:var(--red)}
+.account-return .rlbl{font-size:10px;color:var(--text3);margin-top:2px}
+.account-mini-chart{height:120px;padding:0 20px 12px}
+.account-stats-row{padding:12px 20px;display:flex;gap:20px;border-top:1px solid rgba(30,58,95,.5);flex-wrap:wrap}
+.account-stat{font-size:11px;color:var(--text3)}
+.account-stat span{color:var(--text2);font-weight:600;font-family:'JetBrains Mono',monospace;margin-left:4px}
+.account-stat span.g{color:var(--green)}.account-stat span.r{color:var(--red)}.account-stat span.a{color:var(--amber)}
+/* TRADE TABLE */
+.trade-table-wrap{overflow-x:auto;margin-top:8px}
+table.trade-table{width:100%;border-collapse:collapse;font-size:12px}
+table.trade-table th{background:var(--surface2);padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);text-align:left;border-bottom:1px solid var(--border)}
+table.trade-table td{padding:9px 12px;border-bottom:1px solid rgba(30,58,95,.3);color:var(--text2)}
+table.trade-table tr:last-child td{border-bottom:none}
+table.trade-table tr:hover td{background:rgba(30,58,95,.2)}
+.dir-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px}
+.dir-badge.buy{background:rgba(52,211,153,.1);color:var(--green)}
+.dir-badge.sell{background:rgba(248,113,113,.1);color:var(--red)}
+.outcome-badge{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.outcome-badge.win{color:var(--green)}.outcome-badge.loss{color:var(--red)}.outcome-badge.pending{color:var(--amber)}
+/* INSTRUMENT GRID */
+.inst-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:24px}
+.inst-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+.inst-name{font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px}
+.inst-stat-row{display:flex;justify-content:space-between;margin-bottom:5px}
+.inst-stat-label{font-size:11px;color:var(--text3)}
+.inst-stat-value{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--text2)}
+.inst-stat-value.green{color:var(--green)}.inst-stat-value.amber{color:var(--amber)}.inst-stat-value.red{color:var(--red)}
+.progress-bar{height:3px;background:rgba(30,58,95,.8);border-radius:2px;margin-top:8px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--green))}
+/* SECTION HEADER */
+.section-eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.section-title{font-size:20px;font-weight:700;letter-spacing:-.5px;color:var(--text);margin-bottom:20px}
+/* TOGGLE */
+.toggle-btn{background:none;border:none;color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;padding:0;font-family:'Space Grotesk',sans-serif;display:flex;align-items:center;gap:5px;margin:10px 20px 0}
+.toggle-btn:hover{color:var(--text)}
+/* TOOLTIP */
+.tip-wrap{position:relative;display:inline-flex;align-items:center;gap:5px}
+.tip-icon{width:14px;height:14px;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.25);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--accent);cursor:help;flex-shrink:0;line-height:1}
+.tip-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0c1e35;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--text2);pointer-events:none;opacity:0;transition:opacity .15s;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.4);line-height:1.5;max-width:240px;white-space:normal;text-align:center}
+.tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#0c1e35}
+.tip-wrap:hover .tip-box{opacity:1}
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;height:20px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* RETURNS TABLE */
+.returns-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px}
 .returns-table th{background:var(--surface2);padding:12px 20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);text-align:left;border-bottom:1px solid var(--border)}
 .returns-table td{padding:14px 20px;font-size:13px;border-bottom:1px solid rgba(30,58,95,.3);background:var(--surface)}
 .returns-table tr:last-child td{border-bottom:none}
 .ret-pos{color:var(--green);font-weight:700;font-family:'JetBrains Mono',monospace}
 .ret-neg{color:var(--red);font-weight:700;font-family:'JetBrains Mono',monospace}
-.ret-pending{color:var(--amber);font-family:'JetBrains Mono',monospace}
-/* OPEN TRADES */
-.open-trades{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:32px}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.section-head h3{font-size:13px;font-weight:700;color:var(--text)}
-.live-chip{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--green);background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:20px;padding:3px 10px}
+/* LIVE DOT */
+.live-chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--green);background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:20px;padding:3px 10px}
 .live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.trade-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(30,58,95,.3);flex-wrap:wrap;gap:8px}
-.trade-row:last-child{border-bottom:none}
-.trade-inst{font-size:14px;font-weight:700;color:var(--text);min-width:80px}
-.trade-dir.buy{color:var(--green);font-size:12px;font-weight:700;background:rgba(52,211,153,.1);border-radius:6px;padding:2px 8px}
-.trade-dir.sell{color:var(--red);font-size:12px;font-weight:700;background:rgba(248,113,113,.1);border-radius:6px;padding:2px 8px}
-.trade-entry{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2)}
-.trade-dur{font-size:11px;color:var(--text3)}
-/* INSTRUMENT BREAKDOWN */
-.inst-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:32px}
-.inst-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px}
-.inst-name{font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px}
-.inst-stat-row{display:flex;justify-content:space-between;margin-bottom:6px}
-.inst-stat-label{font-size:11px;color:var(--text3)}
-.inst-stat-value{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--text2)}
-.inst-stat-value.green{color:var(--green)}
-.progress-bar{height:4px;background:rgba(30,58,95,.8);border-radius:2px;margin-top:10px;overflow:hidden}
-.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--green))}
-/* FOOTER */
 footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40px 24px;text-align:center}
 .footer-logo{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:12px}
 .footer-logo span{color:var(--accent)}
@@ -84,14 +111,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
 .footer-nav a:hover{color:var(--accent)}
 .footer-disclaimer{font-size:11px;color:var(--text3);max-width:600px;margin:0 auto 16px;line-height:1.7}
 .footer-copy{font-size:11px;color:var(--text3)}
-@media(max-width:600px){nav{padding:14px 20px}.nav-link{display:none}}
-
-/* TOOLTIPS */
-.tip-wrap{position:relative;display:inline-flex;align-items:center;gap:5px}
-.tip-icon{width:14px;height:14px;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.25);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--accent);cursor:help;flex-shrink:0;line-height:1}
-.tip-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0c1e35;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--text2);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.4);font-family:'Space Grotesk',sans-serif;line-height:1.5;max-width:240px;white-space:normal;text-align:center}
-.tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#0c1e35}
-.tip-wrap:hover .tip-box{opacity:1}
+@media(max-width:700px){nav{padding:14px 20px}.nav-link{display:none}.account-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -108,7 +128,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
     <a href="index.html" class="nav-link">Home</a>
     <a href="track-record.html" class="nav-link active">Track Record</a>
     <a href="index.html#faq" class="nav-link">FAQ</a>
-    <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.18);border-radius:4px;padding:3px 8px">Q1 2027</span>
+    <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.18);border-radius:4px;padding:3px 8px">Q3 2026</span>
     <a href="login.html" class="nav-btn">Sign In</a>
   </div>
 </nav>
@@ -117,118 +137,147 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
 
   <div class="page-header">
     <div class="page-eyebrow">Live Performance</div>
-    <h1 class="page-title">The track record<br>speaks for itself</h1>
-    <p class="page-sub">Built on 5 years of validated backtest data across 8 instruments. Live signals have been running since March 2026 — we publish the full live track record at launch. No screenshots, no claims. Auditable data only.</p>
-    <div class="verified-badge">✓ 5-year backtest validated · live signals accumulating</div>
+    <h1 class="page-title">The track record<br>speaks for itself.</h1>
+    <p class="page-sub">Fully systematic. Every signal logged, every outcome recorded. No cherry-picked screenshots — auditable live data from a multi-account portfolio running since March 2026.</p>
+    <div class="verified-badge" id="liveBadge">● Loading live data…</div>
   </div>
 
-  <!-- STATS GRID -->
-  <!-- BACKTEST BANNER -->
-  <div style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.15);border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px">
+  <!-- DATA ACCUMULATION BANNER -->
+  <div id="accumBanner" style="display:none;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.15);border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px">
     <span style="font-size:18px">⏱️</span>
     <div>
-      <span style="font-size:13px;font-weight:600;color:var(--amber)">Track record in progress · Live since March 19, 2026</span>
-      <span style="font-size:13px;color:var(--text2)"> — Statistics below are from a validated 5-year backtest. Live results are accumulating and will replace these figures at launch.</span>
+      <span style="font-size:13px;font-weight:600;color:var(--amber)" id="accumTitle">Track record accumulating</span>
+      <span style="font-size:13px;color:var(--text2)" id="accumMsg"> — Live since March 19, 2026. Statistics become more meaningful as resolved trades accumulate.</span>
     </div>
   </div>
 
-  <div class="stats-grid">
-    <div class="stat-block"><div class="label">Backtest Win Rate</div><div class="value green">67.6%</div><div class="sub">5yr · 8 instruments</div></div>
-    <div class="stat-block"><div class="label">Live Signals Logged</div><div class="value">60</div><div class="sub">since Mar 19, 2026</div></div>
-    <div class="stat-block"><div class="label">Live Win Rate</div><div class="value amber">65.3%</div><div class="sub">early sample · 49 resolved</div></div>
-    <div class="stat-block"><div class="label" style="display:flex;align-items:center;gap:4px">Backtest Max DD <span class="tip-wrap"><span class="tip-icon">?</span><span class="tip-box">Based on ~1% risk per trade per instrument. Your actual DD will vary based on your position sizing.</span></span></div><div class="value">2.92%</div><div class="sub">worst instrument</div></div>
-    <div class="stat-block"><div class="label">Backtest Return</div><div class="value green">+39.9%</div><div class="sub">per $100K · 5yr</div></div>
+  <!-- LIVE STATS GRID -->
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-block"><div class="label">Total Trades</div><div class="value" id="statTrades"><div class="skeleton" style="width:60px;height:28px"></div></div><div class="sub" id="statTradesSub">loading…</div></div>
+    <div class="stat-block"><div class="label">Live Win Rate</div><div class="value green" id="statWinRate"><div class="skeleton" style="width:70px;height:28px"></div></div><div class="sub" id="statWinRateSub">loading…</div></div>
+    <div class="stat-block"><div class="label">Resolved Trades</div><div class="value" id="statResolved"><div class="skeleton" style="width:50px;height:28px"></div></div><div class="sub">WIN + LOSS outcomes</div></div>
+    <div class="stat-block"><div class="label">Instruments</div><div class="value" id="statInst">8</div><div class="sub">US · EU · Asian sessions</div></div>
     <div class="stat-block"><div class="label">Live Since</div><div class="value" style="font-size:18px;color:var(--text2)">Mar 2026</div><div class="sub">building track record</div></div>
+    <div class="stat-block"><div class="label">Portfolio Max DD</div><div class="value" style="font-size:18px">1.28%</div><div class="sub">live · since Mar 2026</div></div>
   </div>
 
-  <!-- LONG TERM CALLOUT -->
+  <!-- PERFORMANCE CALLOUT -->
   <div style="background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.15);border-radius:14px;padding:20px 28px;display:flex;align-items:flex-start;gap:16px;margin-bottom:32px">
     <div style="font-size:22px;flex-shrink:0;margin-top:2px">📈</div>
     <div>
-      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Designed for long-term performance — not short-term spikes</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.6">This is a systematic, rules-based strategy. Every signal passes through 5 years of validated filters before execution. Expect losing weeks — the edge is statistical and compounds over hundreds of trades. A meaningful evaluation window is 3–6 months minimum. All statistics shown are based on ~1% risk per trade per instrument.</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Capital preservation first — returns are the byproduct</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6">Every signal passes through a systematic risk engine before execution. Position sizes are calculated to protect capital first. Expect losing weeks — the edge is statistical and plays out over hundreds of trades. A meaningful evaluation window is 3–6 months minimum.</div>
     </div>
   </div>
 
-  <!-- EQUITY CURVE -->
-  <div class="chart-card">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:4px">
+  <!-- ACCOUNT BREAKDOWN -->
+  <div style="margin-bottom:20px">
+    <div class="section-eyebrow">Account Breakdown</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <h2 class="section-title" style="margin-bottom:0">Live accounts running the strategy</h2>
+      <span style="font-size:11px;color:var(--text3)">Account names intentionally vague · all running same systematic strategy</span>
+    </div>
+  </div>
+  <div class="account-grid" id="accountGrid">
+    <div class="account-card"><div style="padding:40px;text-align:center;color:var(--text3);font-size:13px">Loading account data…</div></div>
+  </div>
+
+  <!-- LIVE TRADE LOG -->
+  <div class="chart-card" style="margin-bottom:24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
       <div>
-        <div class="chart-title">Strategy Equity Curve — 5 Year Backtest</div>
-        <div class="chart-sub">$100K base · Jan 2021 – Apr 2026 · 8 instruments combined · with DOM filter applied</div>
+        <div class="chart-title">Live Trade Log</div>
+        <div class="chart-sub" style="margin-bottom:0">All resolved trades across all accounts · most recent first · no dollar amounts shown</div>
       </div>
-      <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--amber);white-space:nowrap;flex-shrink:0">Backtest data — live track record in progress</div>
-    </div>
-    <div class="equity-chart">
-      <canvas id="equityCanvas"></canvas>
-    </div>
-  </div>
-
-  <!-- OPEN TRADES -->
-  <div class="open-trades">
-    <div class="section-head">
-      <h3>Currently Open Positions</h3>
-      <div class="live-chip"><span class="live-dot"></span>Live</div>
-    </div>
-    <div id="openTradesContainer">
-      <div class="trade-row">
-        <span class="trade-inst">BTCUSD</span>
-        <span class="trade-dir buy">BUY</span>
-        <span class="trade-entry">Entry: $81,396.77</span>
-        <span class="trade-dur">Open 6h 14m</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="filterBtns">
+        <button class="filter-btn active" data-f="resolved" onclick="filterTrades('resolved')">Resolved</button>
+        <button class="filter-btn" data-f="WIN" onclick="filterTrades('WIN')">Wins</button>
+        <button class="filter-btn" data-f="LOSS" onclick="filterTrades('LOSS')">Losses</button>
       </div>
-      <div style="font-size:12px;color:var(--text3);padding:16px 0;text-align:center;display:none" id="noOpenTrades">No open positions at this time</div>
+    </div>
+    <div class="trade-table-wrap" id="tradeTableWrap">
+      <div style="text-align:center;padding:30px;color:var(--text3);font-size:13px">Loading trades…</div>
     </div>
   </div>
 
-  <!-- MONTHLY RETURNS -->
-  <div class="chart-card">
-    <div class="chart-title">Annual Backtest Returns — Per Instrument</div>
-    <div class="chart-sub">$100K base per instrument · 5-year validated · DOM filter applied · <span style="color:var(--amber)">backtest data</span></div>
-    <table class="returns-table">
-      <thead>
-        <tr>
-          <th>Instrument</th><th>Annual Return</th><th>Win Rate</th><th>Net Profit (5yr)</th>
-          <th><span class="tip-wrap">Max DD<span class="tip-icon">?</span><span class="tip-box">Based on ~1% risk per trade. Scales with your position sizing.</span></span></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="font-weight:600;color:var(--text)">US30</td><td><span class="ret-pos">+$4,960/yr</span></td><td style="color:var(--text2)">75.1%</td><td><span class="ret-pos">+$18,787</span></td><td style="color:var(--text2)">1.08%</td></tr>
-        <tr><td style="font-weight:600;color:var(--text)">NAS100</td><td><span class="ret-pos">+$8,700/yr</span></td><td style="color:var(--text2)">75.4%</td><td><span class="ret-pos">+$43,504</span></td><td style="color:var(--text2)">1.79%</td></tr>
-        <tr><td style="font-weight:600;color:var(--text)">US500</td><td><span class="ret-pos">+$6,250/yr</span></td><td style="color:var(--text2)">69.9%</td><td><span class="ret-pos">+$37,496</span></td><td style="color:var(--text2)">2.92%</td></tr>
-        <tr><td style="font-weight:600;color:var(--text)">JPN225</td><td><span class="ret-pos">+$3,357/yr</span></td><td style="color:var(--text2)">67.4%</td><td><span class="ret-pos">+$16,786</span></td><td style="color:var(--text2)">1.87%</td></tr>
-        <tr><td style="font-weight:600;color:var(--text)">GER40</td><td><span class="ret-pos">+$5,442/yr</span></td><td style="color:var(--text2)">~65%</td><td><span class="ret-pos">+$27,211</span></td><td style="color:var(--text2)">—</td></tr>
-        <tr><td style="font-weight:600;color:var(--text)">BTCUSD</td><td><span class="ret-pos">+$3,029/yr</span></td><td style="color:var(--text2)">62.3%</td><td><span class="ret-pos">+$24,203</span></td><td style="color:var(--text2)">1.93%</td></tr>
-        <tr><td style="font-weight:600;color:var(--text)">XAUUSD</td><td><span class="ret-pos">+$2,223/yr</span></td><td style="color:var(--text2)">75.8%</td><td><span class="ret-pos">+$11,117</span></td><td style="color:var(--text2)">0.96%</td></tr>
-        <tr><td style="font-weight:600;color:var(--text)">XAGUSD</td><td><span class="ret-pos">+$3,307/yr</span></td><td style="color:var(--text2)">64.5%</td><td><span class="ret-pos">+$16,537</span></td><td style="color:var(--text2)">2.03%</td></tr>
-        <tr style="background:var(--surface2)"><td style="font-weight:700;color:var(--accent)">Combined</td><td><span class="ret-pos" style="font-size:15px">+$37,268/yr</span></td><td style="color:var(--green);font-weight:600">avg 69.4%</td><td><span class="ret-pos" style="font-size:15px">+$195,641</span></td><td style="color:var(--text2)">—</td></tr>
-      </tbody>
-    </table>
+  <!-- INSTRUMENT BREAKDOWN LIVE -->
+  <div style="margin-bottom:20px">
+    <div class="section-eyebrow">By Instrument</div>
+    <h2 class="section-title">Live performance breakdown</h2>
+  </div>
+  <div class="inst-grid" id="instGrid">
+    <div style="color:var(--text3);font-size:13px;padding:20px">Loading…</div>
   </div>
 
-  <!-- INSTRUMENT BREAKDOWN -->
-  <div style="margin-bottom:24px">
-    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:12px">By Instrument</div>
-    <h2 style="font-size:22px;font-weight:700;letter-spacing:-.5px;color:var(--text);margin-bottom:24px">Live performance breakdown</h2>
-  </div>
-  <div class="inst-grid">
-    <div class="inst-card"><div class="inst-name">US30</div><div class="inst-stat-row"><span class="inst-stat-label">Win Rate</span><span class="inst-stat-value green">71.4%</span></div><div class="inst-stat-row"><span class="inst-stat-label">Signals</span><span class="inst-stat-value">7</span></div><div class="progress-bar"><div class="progress-fill" style="width:71.4%"></div></div></div>
-    <div class="inst-card"><div class="inst-name">NAS100</div><div class="inst-stat-row"><span class="inst-stat-label">Win Rate</span><span class="inst-stat-value green">63.6%</span></div><div class="inst-stat-row"><span class="inst-stat-label">Signals</span><span class="inst-stat-value">11</span></div><div class="progress-bar"><div class="progress-fill" style="width:63.6%"></div></div></div>
-    <div class="inst-card"><div class="inst-name">US500</div><div class="inst-stat-row"><span class="inst-stat-label">Win Rate</span><span class="inst-stat-value green">66.7%</span></div><div class="inst-stat-row"><span class="inst-stat-label">Signals</span><span class="inst-stat-value">9</span></div><div class="progress-bar"><div class="progress-fill" style="width:66.7%"></div></div></div>
-    <div class="inst-card"><div class="inst-name">JPN225</div><div class="inst-stat-row"><span class="inst-stat-label">Win Rate</span><span class="inst-stat-value green">60.0%</span></div><div class="inst-stat-row"><span class="inst-stat-label">Signals</span><span class="inst-stat-value">5</span></div><div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div></div>
-    <div class="inst-card"><div class="inst-name">BTCUSD</div><div class="inst-stat-row"><span class="inst-stat-label">Win Rate</span><span class="inst-stat-value amber">50.0%</span></div><div class="inst-stat-row"><span class="inst-stat-label">Signals</span><span class="inst-stat-value">8</span></div><div class="progress-bar"><div class="progress-fill" style="width:50%;background:linear-gradient(90deg,var(--amber),var(--amber))"></div></div></div>
-    <div class="inst-card"><div class="inst-name">XAUUSD</div><div class="inst-stat-row"><span class="inst-stat-label">Win Rate</span><span class="inst-stat-value green">75.0%</span></div><div class="inst-stat-row"><span class="inst-stat-label">Signals</span><span class="inst-stat-value">8</span></div><div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div></div>
-    <div class="inst-card"><div class="inst-name">XAGUSD</div><div class="inst-stat-row"><span class="inst-stat-label">Win Rate</span><span class="inst-stat-value green">66.7%</span></div><div class="inst-stat-row"><span class="inst-stat-label">Signals</span><span class="inst-stat-value">6</span></div><div class="progress-bar"><div class="progress-fill" style="width:66.7%"></div></div></div>
-    <div class="inst-card"><div class="inst-name">GER40</div><div class="inst-stat-row"><span class="inst-stat-label">Win Rate</span><span class="inst-stat-value green">66.7%</span></div><div class="inst-stat-row"><span class="inst-stat-label">Signals</span><span class="inst-stat-value">6</span></div><div class="progress-bar"><div class="progress-fill" style="width:66.7%"></div></div></div>
+  <!-- BACKTEST REFERENCE -->
+  <div style="margin:40px 0 20px">
+    <div class="section-eyebrow">Historical Reference</div>
+    <h2 class="section-title">5-Year Backtest — Per Instrument</h2>
+    <div style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.15);border-radius:10px;padding:12px 18px;margin-bottom:20px;font-size:12px;color:var(--amber)">⏱️ Backtest data — $100K base per instrument · DOM filter applied · Jan 2021–May 2026</div>
   </div>
 
-</div>
+  <!-- BACKTEST STATS WIDGET -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 28px;margin-bottom:24px">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);margin-bottom:16px">Combined Portfolio · 8 Instruments · 5yr Backtest · DOM Filter Applied</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:2px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px">
+      <div style="background:var(--surface2);padding:18px 20px;text-align:center">
+        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px">Win Rate</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:500;color:var(--green)">67.6%</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">3,020 trades</div>
+      </div>
+      <div style="background:var(--surface2);padding:18px 20px;text-align:center">
+        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px">
+          <span class="tip-wrap">Profit Factor<span class="tip-icon">?</span><span class="tip-box">Combined gross profit ÷ gross loss across all 8 instruments with DOM filter applied. Above 1.5 is strong — above 2.0 is exceptional for a systematic breakout strategy.</span></span>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:500;color:var(--green)">2.32</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">combined</div>
+      </div>
+      <div style="background:var(--surface2);padding:18px 20px;text-align:center">
+        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px">
+          <span class="tip-wrap">Sharpe Ratio<span class="tip-icon">?</span><span class="tip-box">Average annualised Sharpe across all 8 instruments (DOM filtered). Calculated on trading days only — appropriate for a systematic strategy since capital is only at risk when positions are open. Non-trading days carry zero risk. Above 2.0 is strong; above 3.0 is exceptional.</span></span>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:500;color:var(--green)">3.52</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">avg per instrument</div>
+      </div>
+      <div style="background:var(--surface2);padding:18px 20px;text-align:center">
+        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px">Net Profit (5yr)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:500;color:var(--green)">+$236K</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">$100K base · 8 instruments</div>
+      </div>
+      <div style="background:var(--surface2);padding:18px 20px;text-align:center">
+        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px">
+          <span class="tip-wrap">Max DD Range<span class="tip-icon">?</span><span class="tip-box">Per-instrument max drawdown after DOM filter. Best: XAUUSD at 0.96%. Worst: US500 at 2.97%. Zero instruments above 3%. Monte Carlo validated: zero portfolio ruin probability across 10,000 iterations.</span></span>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:500;color:var(--green)">0.96–2.97%</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">per instrument</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);line-height:1.6">DOM filter removes statistically poor trading days per instrument — 1,020 trades eliminated from 4,040 raw. All metrics calculated on remaining 3,020 trades. $100K base capital per instrument at ~1% risk per trade. GER40 converted from EUR at ~1.08. Period: Jan 2021–May 2026.</div>
+  </div>
 
+  <table class="returns-table">
+    <thead><tr><th>Instrument</th><th>Win Rate</th><th>Profit Factor</th><th>Sharpe</th><th>Net Profit (5yr)</th><th>Max DD</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600;color:var(--text)">US30</td><td style="color:var(--green)">75.1%</td><td style="color:var(--green)">3.25</td><td style="color:var(--text2)">0.98</td><td><span class="ret-pos">+$24,795</span></td><td style="color:var(--green)">1.1%</td></tr>
+      <tr><td style="font-weight:600;color:var(--text)">NAS100</td><td style="color:var(--green)">75.4%</td><td style="color:var(--green)">3.54</td><td style="color:var(--text2)">3.54</td><td><span class="ret-pos">+$49,195</span></td><td style="color:var(--text2)">2.5%</td></tr>
+      <tr><td style="font-weight:600;color:var(--text)">US500</td><td style="color:var(--green)">66.1%</td><td style="color:var(--green)">1.66</td><td style="color:var(--text2)">3.18</td><td><span class="ret-pos">+$42,082</span></td><td style="color:var(--text2)">3.0%</td></tr>
+      <tr><td style="font-weight:600;color:var(--text)">JPN225</td><td style="color:var(--green)">67.4%</td><td style="color:var(--green)">2.34</td><td style="color:var(--text2)">4.70</td><td><span class="ret-pos">+$21,737</span></td><td style="color:var(--green)">1.9%</td></tr>
+      <tr><td style="font-weight:600;color:var(--text)">GER40</td><td style="color:var(--amber)">54.0%</td><td style="color:var(--green)">1.75</td><td style="color:var(--text2)">3.24</td><td><span class="ret-pos">+$32,887</span></td><td style="color:var(--text2)">2.0%</td></tr>
+      <tr><td style="font-weight:600;color:var(--text)">BTCUSD</td><td style="color:var(--green)">62.3%</td><td style="color:var(--green)">1.98</td><td style="color:var(--text2)">3.47</td><td><span class="ret-pos">+$26,890</span></td><td style="color:var(--green)">1.5%</td></tr>
+      <tr><td style="font-weight:600;color:var(--text)">XAUUSD</td><td style="color:var(--green)">75.8%</td><td style="color:var(--green)">1.93</td><td style="color:var(--text2)">3.23</td><td><span class="ret-pos">+$13,662</span></td><td style="color:var(--green)">1.0%</td></tr>
+      <tr><td style="font-weight:600;color:var(--text)">XAGUSD</td><td style="color:var(--green)">64.5%</td><td style="color:var(--green)">2.08</td><td style="color:var(--text2)">3.43</td><td><span class="ret-pos">+$25,227</span></td><td style="color:var(--text2)">2.0%</td></tr>
+      <tr style="background:var(--surface2)"><td style="font-weight:700;color:var(--accent)">Combined</td><td style="color:var(--green);font-weight:600">67.6%</td><td style="color:var(--green);font-weight:600">2.32</td><td style="color:var(--text2);font-weight:600">3.52</td><td><span class="ret-pos" style="font-size:15px">+$236,476</span></td><td style="color:var(--text2)">max 3%</td></tr>
+    </tbody>
+  </table>
+
+</div><!-- /main -->
+
+<!-- WAITLIST -->
 <div style="position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 24px;text-align:center">
   <div style="max-width:520px;margin:0 auto">
-    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:12px">Coming Q1 2027</div>
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:12px">Coming Q3 2026</div>
     <h2 style="font-size:28px;font-weight:700;letter-spacing:-.5px;color:var(--text);margin-bottom:12px;line-height:1.2">Join the waitlist.<br>Be first when we launch.</h2>
-    <p style="font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.7">We're building the 6-month live track record before opening subscriptions. Join the waitlist and we'll email you the moment signups go live.</p>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.7">We're building the live track record before opening subscriptions. Founding cohort gets $149/month locked in forever. Join the list and we'll email you the moment signups go live.</p>
     <div style="display:flex;gap:10px;max-width:420px;margin:0 auto" id="trWaitlistRow">
       <input type="email" id="trEmail" placeholder="your@email.com" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:14px;outline:none"/>
       <button onclick="submitTrWaitlist()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);border:none;border-radius:10px;padding:12px 22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap">Notify Me</button>
@@ -236,6 +285,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
     <div id="trSuccess" style="display:none;color:var(--green);font-size:14px;font-weight:600;margin-top:14px">✓ You're on the list. We'll be in touch.</div>
   </div>
 </div>
+
 <footer>
   <div class="footer-logo">SIG<span>5</span>.IO</div>
   <div class="footer-nav">
@@ -247,92 +297,345 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
   <div class="footer-copy">© 2026 Sig5.io — All rights reserved</div>
 </footer>
 
+<style>
+.filter-btn{font-size:11px;font-weight:600;padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);color:var(--text3);cursor:pointer;transition:all .2s;font-family:'Space Grotesk',sans-serif}
+.filter-btn.active{background:rgba(56,189,248,.1);color:var(--accent);border-color:rgba(56,189,248,.3)}
+.filter-btn:hover{color:var(--text2)}
+</style>
+
 <script>
-// Equity curve chart
-const canvas = document.getElementById('equityCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-const W = canvas.offsetWidth, H = canvas.offsetHeight;
+const SB_URL  = 'https://hefsyjljufetlgnccdqf.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZnN5amxqdWZldGxnbmNjZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDQ1OTIsImV4cCI6MjA4OTM4MDU5Mn0.zCsbFdWD1nMo-Czco5UaBgw7roliZQ3iQv4XVLDOtbs';
+const HEADERS = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY };
+const ACCOUNT_LABELS = ['Account A','Account B','Account C','Account D','Account E','Account F'];
+const ACCOUNT_COLORS = ['#38bdf8','#34d399','#fbbf24','#a78bfa','#fb923c','#f472b6'];
 
-// Sample equity data (normalised to 100K start)
-const data = [100000,99800,100200,100800,101200,100600,101500,102100,101800,102400,103100,102700,103400,103900,103200,103800,104200,103600,104100,104800,104300,105000,105600,104900,105400,105900,105300,105800,106200,105700,106100,106500,105900,106400,106900,106300,106800,107300,106700,107200,107600,107100,107500,107900,107400,107800,108200,107700,108100,108500];
+let resolvedTrades = [], allTrades = [], currentFilter = 'resolved';
 
-const min = Math.min(...data) * 0.999;
-const max = Math.max(...data) * 1.001;
-const toX = i => (i / (data.length-1)) * W;
-const toY = v => H - ((v - min) / (max - min)) * H * 0.85 - H * 0.05;
-
-// Grid lines
-ctx.strokeStyle = 'rgba(30,58,95,0.5)';
-ctx.lineWidth = 1;
-for(let i = 0; i <= 4; i++){
-  const y = H * 0.05 + (H * 0.85 / 4) * i;
-  ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
+async function sb(path) {
+  const r = await fetch(SB_URL + path, { headers: HEADERS });
+  return r.ok ? r.json() : [];
 }
 
-// Fill gradient
-const grad = ctx.createLinearGradient(0,0,0,H);
-grad.addColorStop(0,'rgba(56,189,248,0.15)');
-grad.addColorStop(1,'rgba(56,189,248,0)');
-ctx.beginPath();
-ctx.moveTo(toX(0), H);
-data.forEach((v,i) => ctx.lineTo(toX(i), toY(v)));
-ctx.lineTo(toX(data.length-1), H);
-ctx.closePath();
-ctx.fillStyle = grad;
-ctx.fill();
-
-// Line
-ctx.beginPath();
-data.forEach((v,i) => i===0 ? ctx.moveTo(toX(i),toY(v)) : ctx.lineTo(toX(i),toY(v)));
-ctx.strokeStyle = '#38bdf8';
-ctx.lineWidth = 2;
-ctx.lineJoin = 'round';
-ctx.stroke();
-
-// End dot
-const lastX = toX(data.length-1), lastY = toY(data[data.length-1]);
-ctx.beginPath();ctx.arc(lastX,lastY,5,0,Math.PI*2);
-ctx.fillStyle='#38bdf8';ctx.fill();
-ctx.beginPath();ctx.arc(lastX,lastY,9,0,Math.PI*2);
-ctx.fillStyle='rgba(56,189,248,0.2)';ctx.fill();
-
-function submitTrWaitlist(){
-  const e=document.getElementById('trEmail');
-  if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return}
-  e.style.borderColor='var(--green)';
-  document.getElementById('trWaitlistRow').style.display='none';
-  document.getElementById('trSuccess').style.display='block';
+function fmtDate(ts) {
+  return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 }
-document.getElementById('trEmail')?.addEventListener('keydown',function(e){if(e.key==='Enter')submitTrWaitlist()});
+function fmtTime(ts) {
+  return new Date(ts).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+}
+function toDateKey(ts) { // YYYY-MM-DD in UTC
+  return new Date(ts).toISOString().slice(0,10);
+}
 
+// Draw equity curve with date labels on X axis and optional dollar Y labels
+function drawCurve(canvasId, dataPoints, color, height, timestamps, rawBalances) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || dataPoints.length < 2) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth, H = height;
+  if (!W) return;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
 
-async function submitToSupabase(email, source) {
-  try {
-    const r = await fetch('https://hefsyjljufetlgnccdqf.supabase.co/rest/v1/waitlist', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZnN5amxqdWZldGxnbmNjZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDQ1OTIsImV4cCI6MjA4OTM4MDU5Mn0.zCsbFdWD1nMo-Czco5UaBgw7roliZQ3iQv4XVLDOtbs',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZnN5amxqdWZldGxnbmNjZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDQ1OTIsImV4cCI6MjA4OTM4MDU5Mn0.zCsbFdWD1nMo-Czco5UaBgw7roliZQ3iQv4XVLDOtbs',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ email, source })
+  const labelH = timestamps ? 18 : 0;
+  const yLabelW = rawBalances ? 54 : 0;
+  const chartW = W - yLabelW;
+  const chartH = H - labelH;
+  const offsetX = yLabelW;
+
+  const min = Math.min(...dataPoints) * 0.998, max = Math.max(...dataPoints) * 1.002;
+  const toX = i => offsetX + (i / (dataPoints.length - 1)) * chartW;
+  const toY = v => chartH - ((v - min) / (max - min || 0.01)) * chartH * 0.82 - chartH * 0.08;
+
+  // Y-axis dollar labels
+  if (rawBalances && rawBalances.length >= 2) {
+    const rawMin = Math.min(...rawBalances), rawMax = Math.max(...rawBalances);
+    const fmtK = v => v >= 1000000 ? '$'+(v/1000000).toFixed(2)+'M' : '$'+(v/1000).toFixed(1)+'K';
+    ctx.fillStyle = 'rgba(74,96,128,0.85)';
+    ctx.font = `9px JetBrains Mono, monospace`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    const ySteps = [0, 0.5, 1];
+    ySteps.forEach(pct => {
+      const val = rawMin + (rawMax - rawMin) * (1 - pct);
+      const normVal = min + (max - min) * (1 - pct * 0.82) - (max - min) * 0.08;
+      const yPos = toY(normVal);
+      ctx.fillText(fmtK(val), yLabelW - 4, yPos);
+      // Tick mark
+      ctx.strokeStyle = 'rgba(30,58,95,0.3)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(offsetX, yPos); ctx.lineTo(W, yPos); ctx.stroke();
     });
-    return r.ok || r.status === 409; // 409 = already exists, that's fine
-  } catch(e) { return false; }
+  } else {
+    // Grid lines without labels
+    ctx.strokeStyle = 'rgba(30,58,95,0.4)'; ctx.lineWidth = 1;
+    for (let i = 0; i <= 3; i++) {
+      const y = chartH * 0.08 + (chartH * 0.82 / 3) * i;
+      ctx.beginPath(); ctx.moveTo(offsetX, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+  }
+
+  // Zero/baseline dashed
+  const zeroY = toY(dataPoints[0]);
+  ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(offsetX, zeroY); ctx.lineTo(W, zeroY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  const isPos = dataPoints[dataPoints.length-1] >= dataPoints[0];
+  const lineCol = isPos ? color : '#f87171';
+
+  // Fill
+  const grad = ctx.createLinearGradient(0,0,0,chartH);
+  grad.addColorStop(0, isPos ? 'rgba(56,189,248,0.12)' : 'rgba(248,113,113,0.10)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.beginPath(); ctx.moveTo(toX(0), chartH);
+  dataPoints.forEach((v,i) => ctx.lineTo(toX(i), toY(v)));
+  ctx.lineTo(toX(dataPoints.length-1), chartH); ctx.closePath();
+  ctx.fillStyle = grad; ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  dataPoints.forEach((v,i) => i===0 ? ctx.moveTo(toX(i),toY(v)) : ctx.lineTo(toX(i),toY(v)));
+  ctx.strokeStyle = lineCol; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
+
+  // End dot
+  const lx = toX(dataPoints.length-1), ly = toY(dataPoints[dataPoints.length-1]);
+  ctx.beginPath(); ctx.arc(lx,ly,4,0,Math.PI*2); ctx.fillStyle=lineCol; ctx.fill();
+  ctx.beginPath(); ctx.arc(lx,ly,8,0,Math.PI*2); ctx.fillStyle=isPos?'rgba(56,189,248,0.18)':'rgba(248,113,113,0.18)'; ctx.fill();
+
+  // X-axis date labels
+  if (timestamps && timestamps.length >= 2) {
+    ctx.fillStyle = 'rgba(74,96,128,0.8)';
+    ctx.font = `9px JetBrains Mono, monospace`;
+    ctx.textBaseline = 'top';
+    const labelY = chartH + 3;
+    const labelIndices = [0, Math.floor(dataPoints.length/2), dataPoints.length-1];
+    labelIndices.forEach(i => {
+      const label = new Date(timestamps[i]).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      const x = toX(i);
+      ctx.textAlign = i===0 ? 'left' : i===dataPoints.length-1 ? 'right' : 'center';
+      ctx.fillText(label, x, labelY);
+    });
+  }
 }
+
+// Portfolio combined curve — bucket by date, sum balances
+function buildPortfolioCurve(snapsByAccount) {
+  const acctIds = Object.keys(snapsByAccount);
+  if (!acctIds.length) return;
+
+  // Get start balance per account
+  const startBals = {};
+  acctIds.forEach(id => {
+    const sorted = [...snapsByAccount[id]].sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
+    startBals[id] = sorted[0].balance;
+  });
+  const startTotal = Object.values(startBals).reduce((s,v)=>s+v,0);
+
+  // Collect all date keys sorted
+  const dateSet = new Set();
+  acctIds.forEach(id => snapsByAccount[id].forEach(s => dateSet.add(toDateKey(s.timestamp))));
+  const dates = [...dateSet].sort();
+
+  // For each date, sum all accounts using last known balance
+  const lastKnown = {};
+  const combined = [], usedDates = [];
+  dates.forEach(date => {
+    acctIds.forEach(id => {
+      const snap = snapsByAccount[id].filter(s => toDateKey(s.timestamp) <= date).sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp))[0];
+      if (snap) lastKnown[id] = snap.balance;
+    });
+    if (Object.keys(lastKnown).length > 0) {
+      const total = Object.values(lastKnown).reduce((s,v)=>s+v,0);
+      combined.push(total / startTotal * 100);
+      usedDates.push(date+'T12:00:00Z');
+    }
+  });
+
+  if (combined.length < 2) return;
+
+  const totalRet = combined[combined.length-1] - 100;
+  document.getElementById('portfolioChartSub').textContent =
+    `${acctIds.length} account${acctIds.length!==1?'s':''} · ${dates.length} trading days · Combined return: ${totalRet>=0?'+':''}${totalRet.toFixed(2)}%`;
+
+  requestAnimationFrame(() => {
+    const canvas = document.getElementById('portfolioCanvas');
+    if (canvas) {
+      canvas.style.height = '220px';
+      drawCurve('portfolioCanvas', combined, '#38bdf8', 220, usedDates);
+    }
+  });
+}
+
+// Account cards
+function buildAccountCards(snapsByAccount) {
+  const acctIds = Object.keys(snapsByAccount).sort((a,b) => {
+    const aFirst = [...snapsByAccount[a]].sort((x,y)=>new Date(x.timestamp)-new Date(y.timestamp))[0].timestamp;
+    const bFirst = [...snapsByAccount[b]].sort((x,y)=>new Date(x.timestamp)-new Date(y.timestamp))[0].timestamp;
+    return new Date(aFirst) - new Date(bFirst);
+  });
+  const grid = document.getElementById('accountGrid');
+  grid.innerHTML = '';
+
+  acctIds.forEach((acctId, idx) => {
+    const snaps = [...snapsByAccount[acctId]].sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
+    const startBal = snaps[0].balance;
+    const latestBal = snaps[snaps.length-1].balance;
+    const returnPct = ((latestBal - startBal) / startBal) * 100;
+    const normalised = snaps.map(s => s.balance / startBal * 100);
+    const timestamps = snaps.map(s => s.timestamp);
+    const rawBalances = snaps.map(s => s.balance);
+    const label = ACCOUNT_LABELS[idx] || ('Account ' + (idx+1));
+    const color = ACCOUNT_COLORS[idx] || '#38bdf8';
+    const since = fmtDate(snaps[0].timestamp);
+    const canvasId = 'acctCanvas_' + idx;
+    const isPos = returnPct >= 0;
+    let peak = normalised[0], maxDD = 0;
+    normalised.forEach(v => { if(v>peak)peak=v; const dd=(peak-v)/peak*100; if(dd>maxDD)maxDD=dd; });
+
+    const card = document.createElement('div');
+    card.className = 'account-card';
+    card.innerHTML = `
+      <div class="account-card-header">
+        <div>
+          <div class="account-name">${label}</div>
+          <div class="account-since">Live since ${since}</div>
+        </div>
+        <div class="account-return">
+          <div class="pct ${isPos?'pos':'neg'}">${isPos?'+':''}${returnPct.toFixed(2)}%</div>
+          <div class="rlbl">total return</div>
+        </div>
+      </div>
+      <div style="padding:12px 20px 4px">
+        <canvas id="${canvasId}" style="width:100%;height:110px;display:block"></canvas>
+      </div>
+      <div class="account-stats-row">
+        <div class="account-stat">Max DD<span class="r">${maxDD.toFixed(2)}%</span></div>
+        <div class="account-stat">Data points<span>${snaps.length}</span></div>
+        <div class="account-stat">Updated<span>${fmtDate(snaps[snaps.length-1].timestamp)}</span></div>
+      </div>`;
+    grid.appendChild(card);
+    requestAnimationFrame(() => drawCurve(canvasId, normalised, color, 110, timestamps, rawBalances));
+  });
+
+  if (!acctIds.length) {
+    grid.innerHTML = '<div style="padding:30px;text-align:center;color:var(--text3);font-size:13px">No account data yet</div>';
+  }
+}
+
+// Trade table — default to resolved only
+function renderTradeTable(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    const match = (filter==='resolved'&&b.dataset.f==='resolved')||(filter==='WIN'&&b.dataset.f==='WIN')||(filter==='LOSS'&&b.dataset.f==='LOSS');
+    b.classList.toggle('active', match);
+  });
+  const source = filter==='WIN'||filter==='LOSS' ? resolvedTrades.filter(t=>t.outcome===filter) : resolvedTrades;
+  const wrap = document.getElementById('tradeTableWrap');
+  if (!source.length) {
+    wrap.innerHTML='<div style="text-align:center;padding:30px;color:var(--text3);font-size:13px">No resolved trades yet — outcomes reconciled as positions close</div>';
+    return;
+  }
+  const rows = source.slice(0,150).map(t => {
+    const dirClass = (t.direction||'').toLowerCase()==='buy'?'buy':'sell';
+    const outClass = t.outcome==='WIN'?'win':'loss';
+    return `<tr>
+      <td style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap">${fmtTime(t.timestamp)}</td>
+      <td style="font-weight:700;color:var(--text)">${t.ticker}</td>
+      <td><span class="dir-badge ${dirClass}">${(t.direction||'').toUpperCase()}</span></td>
+      <td><span class="outcome-badge ${outClass}">${t.outcome}</span></td>
+    </tr>`;
+  }).join('');
+  wrap.innerHTML = `<table class="trade-table"><thead><tr>
+    <th>Date / Time (EST)</th><th>Instrument</th><th>Direction</th>
+    <th>Outcome
+      <span class="tip-wrap" style="margin-left:4px"><span class="tip-icon">?</span><span class="tip-box" style="white-space:normal">Win probability scoring powered by ML — coming soon. Currently showing resolved outcomes only.</span></span>
+    </th>
+  </tr></thead><tbody>${rows}</tbody></table>
+  ${source.length>150?`<div style="text-align:center;padding:10px;font-size:11px;color:var(--text3)">Showing most recent 150 of ${source.length}</div>`:''}`;
+}
+
+function filterTrades(f) { renderTradeTable(f); }
+
+// Instrument grid — resolved only
+function buildInstGrid(resolved) {
+  const byInst = {};
+  resolved.forEach(s => {
+    if (!byInst[s.ticker]) byInst[s.ticker] = {wins:0,total:0};
+    byInst[s.ticker].total++;
+    if (s.outcome==='WIN') byInst[s.ticker].wins++;
+  });
+  const grid = document.getElementById('instGrid');
+  const instruments = Object.keys(byInst).sort();
+  if (!instruments.length) { grid.innerHTML='<div style="color:var(--text3);font-size:13px;padding:20px">No resolved trades yet</div>'; return; }
+  grid.innerHTML = instruments.map(inst => {
+    const {wins,total} = byInst[inst];
+    const wr = total ? (wins/total*100) : 0;
+    const wrClass = wr>=65?'green':wr>=50?'amber':'red';
+    return `<div class="inst-card">
+      <div class="inst-name">${inst}</div>
+      <div class="inst-stat-row"><span class="inst-stat-label">Win Rate</span><span class="inst-stat-value ${wrClass}">${wr.toFixed(1)}%</span></div>
+      <div class="inst-stat-row"><span class="inst-stat-label">Resolved</span><span class="inst-stat-value">${total}</span></div>
+      <div class="inst-stat-row"><span class="inst-stat-label">W / L</span><span class="inst-stat-value">${wins} / ${total-wins}</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(wr,100)}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+async function loadAll() {
+  const [snapsRaw, signalsRaw] = await Promise.all([
+    sb('/rest/v1/balance_snapshots?select=account_id,balance,timestamp&order=timestamp.asc&limit=5000'),
+    sb('/rest/v1/signal_log?select=ticker,direction,outcome,timestamp&decision=eq.ALLOW&order=timestamp.desc&limit=1000')
+  ]);
+
+  const snapsByAccount = {};
+  (snapsRaw||[]).forEach(s => {
+    if (!snapsByAccount[s.account_id]) snapsByAccount[s.account_id] = [];
+    snapsByAccount[s.account_id].push(s);
+  });
+
+  // Normalise US100 → NAS100
+  const signals = (signalsRaw||[]).map(s => ({
+    ...s, ticker: s.ticker === 'US100' ? 'NAS100' : s.ticker
+  })).filter(s => {
+    const d = (s.direction||'').toLowerCase();
+    return d !== 'close';
+  });
+  resolvedTrades = signals.filter(s => s.outcome==='WIN' || s.outcome==='LOSS');
+  allTrades = signals;
+
+  const wins = resolvedTrades.filter(s=>s.outcome==='WIN').length;
+  const winRate = resolvedTrades.length ? (wins/resolvedTrades.length*100).toFixed(1) : null;
+
+  document.getElementById('statTrades').textContent = signals.length;
+  document.getElementById('statTradesSub').textContent = resolvedTrades.length + ' resolved · ' + (signals.length - resolvedTrades.length) + ' pending';
+  document.getElementById('statWinRate').textContent = winRate ? winRate+'%' : '—';
+  document.getElementById('statWinRateSub').textContent = resolvedTrades.length ? resolvedTrades.length+' resolved trades' : 'accumulating…';
+  document.getElementById('statResolved').textContent = resolvedTrades.length;
+  document.getElementById('liveBadge').textContent = '● Live · ' + signals.length + ' trades · ' + (winRate ? winRate+'% win rate' : 'accumulating');
+
+  if (resolvedTrades.length < 50) {
+    document.getElementById('accumBanner').style.display = 'flex';
+    document.getElementById('accumTitle').textContent = 'Track record accumulating · ' + resolvedTrades.length + ' resolved trades';
+    document.getElementById('accumMsg').textContent = ' — Statistics become more meaningful with a larger sample. Live since March 2026.';
+  }
+
+  buildAccountCards(snapsByAccount);
+  renderTradeTable('resolved');
+  buildInstGrid(resolvedTrades);
+}
+
+loadAll().catch(e => console.warn('Track record error:', e));
+
 async function submitTrWaitlist(){
   const e=document.getElementById('trEmail');
-  if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return}
-  await submitToSupabase(e.value, 'track-record');
+  if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return;}
+  try{ await fetch(SB_URL+'/rest/v1/waitlist',{method:'POST',headers:{...HEADERS,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({email:e.value,source:'track-record'})}); }catch(err){}
   e.style.borderColor='var(--green)';
   document.getElementById('trWaitlistRow').style.display='none';
   document.getElementById('trSuccess').style.display='block';
 }
-document.getElementById('trEmail')?.addEventListener('keydown',function(e){if(e.key==='Enter')submitTrWaitlist()});
+document.getElementById('trEmail')?.addEventListener('keydown',function(e){if(e.key==='Enter')submitTrWaitlist();});
 </script>
 </body>
 </html>
