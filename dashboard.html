@@ -139,6 +139,19 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
       <div class="dom-grid" id="domGrid"></div>
     </div>
 
+    <!-- PER-INSTRUMENT RISK STATE -->
+    <div class="dom-widget" style="margin-bottom:20px">
+      <div class="widget-title" style="margin-bottom:14px">Risk State by Instrument — click to see decay ladder</div>
+      <div id="riskTileGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px"></div>
+      <div id="riskLadderPanel" style="background:var(--surface2);border:1px solid rgba(251,191,36,.15);border-radius:10px;padding:16px;display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-size:12px;font-weight:700;color:var(--amber)" id="riskLadderTitle">US30 — Risk Ladder</div>
+          <div style="font-size:11px;color:var(--text3)" id="riskLadderDD"></div>
+        </div>
+        <div id="riskLadderContent"></div>
+      </div>
+    </div>
+
     <!-- TELEMETRY FEED -->
     <div class="dom-widget" style="margin-bottom:20px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
@@ -249,13 +262,7 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
         <div style="position:relative">
           <input type="text" value="1.00%" readonly style="font-family:'JetBrains Mono',monospace;background:rgba(30,58,95,.3);color:var(--text3);cursor:not-allowed;border-color:rgba(30,58,95,.5);width:100%"/>
         </div>
-        <div style="font-size:11px;color:var(--text3);margin-top:6px;line-height:1.6">Risk % is managed automatically by the system. It decays 15% after each loss (floor 0.25%) and recovers 33% after each win (cap 1.0%). You cannot override this.</div>
-      </div>
-
-      <!-- DECAY LADDER VISUAL -->
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:20px">
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:12px">Your Risk Ladder</div>
-        <div id="decayLadder"></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;line-height:1.6">Risk % is managed automatically by the system. It decays 15% after each loss (floor 0.25%) and recovers 33% after each win (cap 1.0%). You cannot override this. View the per-instrument risk state on the Overview tab.</div>
       </div>
 
       <button class="save-btn" onclick="saveSizing()">Save Drawdown Limit</button>
@@ -436,25 +443,87 @@ function saveWebhook(){
 document.getElementById('ddTipIcon')?.addEventListener('mouseenter',()=>{document.getElementById('ddTip').style.display='block';});
 document.getElementById('ddTipIcon')?.addEventListener('mouseleave',()=>{document.getElementById('ddTip').style.display='none';});
 
-function renderDecayLadder(currentRisk){
-  const levels=[];let r=1.0;
-  while(r>0.25){levels.push(parseFloat(r.toFixed(4)));r=Math.max(0.25,r*0.85);if(levels.length>12)break;}
-  levels.push(0.25);
-  const unique=[...new Set(levels.map(l=>parseFloat(l.toFixed(2))))];
-  const el=document.getElementById('decayLadder');if(!el)return;
-  el.innerHTML=unique.map(level=>{
-    const isCurrent=Math.abs(level-currentRisk)<0.02;
-    const pct=(level/1.0)*100;
-    return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${isCurrent?'var(--accent)':'var(--text3)'};width:42px;flex-shrink:0;font-weight:${isCurrent?'700':'400'}">${level.toFixed(2)}%</div>
-      <div style="flex:1;height:4px;background:rgba(30,58,95,.6);border-radius:2px;overflow:hidden">
-        <div style="height:100%;width:${pct}%;background:${isCurrent?'var(--accent)':'rgba(30,58,95,.8)'};border-radius:2px"></div>
-      </div>
-      ${isCurrent?'<span style="font-size:10px;color:var(--accent);font-weight:700">← you</span>':''}
+// Per-instrument risk state
+let riskState = {}; // { BTCUSD: 0.61, XAUUSD: 1.0, ... }
+let selectedRiskInst = null;
+const subDD = 10000; // will be overridden by subscriber's actual DD once auth is wired
+
+async function loadRiskState(){
+  // Get most recent ALLOW entry signal per instrument to extract mult
+  const r = await fetch(`${SB_URL}/rest/v1/signal_log?select=ticker,comment&decision=eq.ALLOW&direction=neq.close&order=timestamp.desc&limit=200`,{headers:HEADERS});
+  const rows = await r.json();
+  // Keep first occurrence of each ticker (most recent)
+  const seen = {};
+  (rows||[]).forEach(row => {
+    if (!seen[row.ticker] && row.comment) {
+      const m = row.comment.match(/mult=(\d+(?:\.\d+)?)%/);
+      seen[row.ticker] = m ? parseFloat(m[1]) / 100 : 1.0;
+    }
+  });
+  riskState = seen;
+  renderRiskTiles();
+}
+
+function renderRiskTiles(){
+  const grid = document.getElementById('riskTileGrid');
+  if (!grid) return;
+  grid.innerHTML = INSTRUMENTS.map(inst => {
+    const mult = riskState[inst] !== undefined ? riskState[inst] : 1.0;
+    const pct  = (mult * 100).toFixed(0);
+    const color = mult >= 0.8 ? 'var(--green)' : mult >= 0.5 ? 'var(--amber)' : 'var(--red)';
+    const isSelected = inst === selectedRiskInst;
+    return `<div onclick="selectRiskTile('${inst}')" style="
+      border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:all .2s;
+      background:${isSelected ? 'rgba(251,191,36,.12)' : 'rgba(30,58,95,.4)'};
+      border:1px solid ${isSelected ? 'rgba(251,191,36,.5)' : 'rgba(30,58,95,.6)'};
+    ">
+      <span style="font-size:11px;font-weight:700;color:${isSelected?'var(--amber)':'var(--text2)'};display:block;margin-bottom:4px">${inst}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:${color}">${pct}%</span>
     </div>`;
   }).join('');
 }
-renderDecayLadder(1.0);
+
+function selectRiskTile(inst){
+  selectedRiskInst = inst;
+  renderRiskTiles();
+  const mult     = riskState[inst] !== undefined ? riskState[inst] : 1.0;
+  const baseRisk = subDD * 0.10; // 10% of DD
+  const panel    = document.getElementById('riskLadderPanel');
+  const title    = document.getElementById('riskLadderTitle');
+  const ddLabel  = document.getElementById('riskLadderDD');
+  const content  = document.getElementById('riskLadderContent');
+  panel.style.display = 'block';
+  title.textContent   = `${inst} — Risk Ladder`;
+  ddLabel.textContent = `Base risk: $${baseRisk.toLocaleString()} · Current: $${(baseRisk * mult).toFixed(0)}`;
+
+  // Build ladder levels
+  const levels = []; let r = 1.0;
+  while (r > 0.25) { levels.push(parseFloat(r.toFixed(4))); r = Math.max(0.25, r * 0.85); if (levels.length > 12) break; }
+  levels.push(0.25);
+  const unique = [...new Set(levels.map(l => parseFloat(l.toFixed(2))))];
+
+  content.innerHTML = unique.map(level => {
+    const isCurrent  = Math.abs(level - mult) < 0.015;
+    const dollarRisk = (baseRisk * level).toFixed(0);
+    const pct        = (level * 100).toFixed(0);
+    return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;width:34px;flex-shrink:0;font-weight:${isCurrent?'700':'400'};color:${isCurrent?'var(--amber)':'var(--text3)'}">${pct}%</div>
+      <div style="flex:1;height:4px;background:rgba(30,58,95,.6);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${isCurrent?'var(--amber)':'rgba(30,58,95,.8)'};border-radius:2px;transition:width .3s"></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;width:48px;text-align:right;flex-shrink:0;color:${isCurrent?'var(--amber)':'var(--text3)'}">$${parseInt(dollarRisk).toLocaleString()}</div>
+      ${isCurrent?'<span style="font-size:10px;color:var(--amber);font-weight:700;flex-shrink:0">← now</span>':'<span style="width:34px"></span>'}
+    </div>`;
+  }).join('');
+}
+
+// Auto-select first tile once data loads
+function initRiskTiles(){
+  loadRiskState().then(()=>{
+    if (INSTRUMENTS.length) selectRiskTile(INSTRUMENTS[0]);
+  }).catch(e=>console.warn('loadRiskState failed:',e.message));
+}
+
 
 function saveSizing(){
   const c=document.getElementById('sizingConfirm');c.style.display='inline';
@@ -467,6 +536,7 @@ if (!token) {
   if (badge) badge.innerHTML = `<span style="font-size:11px;color:var(--amber)">⏱ 5-min delay · <a href="login.html" style="color:var(--accent)">Subscribe for live access</a></span>`;
 }
 renderDomBlocks();
+initRiskTiles();
 loadTelemetry();
 loadRecentDeliveries();
 loadStats();
