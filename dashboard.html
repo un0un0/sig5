@@ -135,24 +135,40 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
 
     <!-- DOM Blocks Today -->
     <div class="dom-widget">
-      <div class="widget-title">Today's DOM Status — Day 7</div>
+      <div class="widget-title" id="domTitle">Today's DOM Status — loading…</div>
       <div class="dom-grid" id="domGrid"></div>
     </div>
 
-    <!-- Today's open trades -->
-    <div class="widget-title" style="margin-bottom:12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text3)">Recent Signals</div>
-    <table class="signal-table">
-      <thead>
-        <tr>
-          <th>Time (EST)</th>
-          <th>Instrument</th>
-          <th>Direction</th>
-          <th>Outcome</th>
-          <th>Delivered</th>
-        </tr>
-      </thead>
-      <tbody id="recentSignals"></tbody>
-    </table>
+    <!-- TELEMETRY FEED -->
+    <div class="dom-widget" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="widget-title" style="margin-bottom:0">Live System Activity</div>
+        <div id="telemetryBadge" style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green)"><span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span>Live</div>
+      </div>
+      <div id="telemetryFeed" style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto">
+        <div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Loading activity…</div>
+      </div>
+    </div>
+
+    <!-- KILL SWITCH -->
+    <div style="background:rgba(248,113,113,.04);border:1px solid rgba(248,113,113,.15);border-radius:14px;padding:20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">Emergency Pause</div>
+        <div style="font-size:12px;color:var(--text3)">Instantly stop all signal delivery without cancelling your subscription. Resume anytime.</div>
+      </div>
+      <button id="killSwitchBtn" onclick="togglePause()" style="background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.3);border-radius:10px;padding:10px 22px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap">⏸ Pause Signals</button>
+    </div>
+
+    <!-- Recent signals -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3)">Recent Deliveries</div>
+      <table class="signal-table" style="border:none;border-radius:0">
+        <thead><tr><th>Time</th><th>Instrument</th><th>Direction</th><th>Outcome</th><th>Delivery</th></tr></thead>
+        <tbody id="recentSignals"></tbody>
+      </table>
+    </div>
+  </div>
+
   </div>
 
   <!-- SIGNALS PAGE -->
@@ -273,6 +289,16 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
 </div>
 
 <script>
+const SB_URL  = 'https://hefsyjljufetlgnccdqf.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZnN5amxqdWZldGxnbmNjZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDQ1OTIsImV4cCI6MjA4OTM4MDU5Mn0.zCsbFdWD1nMo-Czco5UaBgw7roliZQ3iQv4XVLDOtbs';
+const HEADERS = {apikey:SB_KEY, Authorization:'Bearer '+SB_KEY};
+const SENTRY_URL = 'https://sentry.up.railway.app'; // update if needed
+const DOM_RULES  = {US30:[7,19,21,24,30],NAS100:[1,2,5,11,12,20],US500:[1,4,5,11,14,16,17,28,29],JPN225:[12,18,19,21,26,31],GER40:[5,8,10,24,26],BTCUSD:[7,14,18,19,22,23,24,25,26,29],XAUUSD:[15,20,23,27],XAGUSD:[3,7,8,10,14,18,22,23,24,31]};
+const INSTRUMENTS=['US30','NAS100','US500','JPN225','GER40','BTCUSD','XAUUSD','XAGUSD'];
+
+let isPaused = false;
+const token = localStorage.getItem('sig5_token') || null;
+
 // Nav tabs
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -281,49 +307,111 @@ function showPage(id){
   event.target.classList.add('active');
 }
 
-// DOM blocks
-const INSTRUMENTS=['US30','NAS100','US500','JPN225','GER40','BTCUSD','XAUUSD','XAGUSD'];
-const BLOCKED_TODAY=['US30','XAGUSD'];
-const domGrid=document.getElementById('domGrid');
-INSTRUMENTS.forEach(i=>{
-  const blocked=BLOCKED_TODAY.includes(i);
-  const div=document.createElement('div');
-  div.className='dom-pill '+(blocked?'blocked':'clear');
-  div.innerHTML='<span class="ticker">'+i+'</span><span class="dom-status">'+(blocked?'BLOCKED':'CLEAR')+'</span>';
-  domGrid.appendChild(div);
-});
-
-// Sample signals
-const signals=[
-  {time:'09:32 AM',inst:'BTCUSD',dir:'buy',entry:'81396',outcome:'open',delivered:true},
-  {time:'03:14 AM',inst:'XAUUSD',dir:'buy',entry:'3241.50',outcome:'win',delivered:true},
-  {time:'Yesterday',inst:'NAS100',dir:'sell',entry:'19234',outcome:'loss',delivered:true},
-  {time:'Yesterday',inst:'US500',dir:'buy',entry:'5612',outcome:'win',delivered:true},
-  {time:'May 5',inst:'US30',dir:'buy',entry:'40812',outcome:'win',delivered:true},
-];
-
-function outcomeCell(o){
-  if(o==='win') return '<span class="outcome-badge win">WIN</span>';
-  if(o==='loss') return '<span class="outcome-badge loss">LOSS</span>';
-  return '<span class="outcome-badge open">OPEN</span>';
-}
-function dirCell(d){
-  return '<span class="dir-badge '+d+'">'+d.toUpperCase()+'</span>';
+// DOM blocks from real day_of_month
+function renderDomBlocks(){
+  const today = new Date().getDate();
+  document.getElementById('domTitle').textContent = `Today's DOM Status — Day ${today}`;
+  const grid = document.getElementById('domGrid');
+  grid.innerHTML = '';
+  INSTRUMENTS.forEach(inst => {
+    const blocked = (DOM_RULES[inst]||[]).includes(today);
+    const div = document.createElement('div');
+    div.className = 'dom-pill ' + (blocked?'blocked':'clear');
+    div.innerHTML = `<span class="ticker">${inst}</span><span class="dom-status">${blocked?'BLOCKED':'CLEAR'}</span>`;
+    grid.appendChild(div);
+  });
 }
 
-const recentTbody=document.getElementById('recentSignals');
-signals.slice(0,5).forEach(s=>{
-  const tr=document.createElement('tr');
-  tr.innerHTML='<td style="color:var(--text3);font-family:\'JetBrains Mono\',monospace;font-size:12px">'+s.time+'</td><td style="font-weight:700;color:var(--text)">'+s.inst+'</td><td>'+dirCell(s.dir)+'</td><td>'+outcomeCell(s.outcome)+'</td><td style="color:var(--green);font-size:12px">✓ Delivered</td>';
-  recentTbody.appendChild(tr);
-});
+// Telemetry feed from signal_log — 5min delay for preview (no token)
+async function loadTelemetry(){
+  const cutoff = new Date(Date.now() - (token ? 0 : 5*60*1000)).toISOString();
+  const r = await fetch(`${SB_URL}/rest/v1/signal_log?select=ticker,direction,decision,reason,flags,timestamp&order=timestamp.desc&limit=20&timestamp=lt.${cutoff}`,{headers:HEADERS});
+  const rows = await r.json();
+  const feed = document.getElementById('telemetryFeed');
+  if (!rows.length){feed.innerHTML='<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">No activity yet</div>';return;}
+  feed.innerHTML = rows.map(row=>{
+    const t = new Date(row.timestamp).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+    const isBlock = row.decision==='BLOCK';
+    const dir = (row.direction||'').toLowerCase();
+    const isClose = dir==='close';
+    const color = isBlock?'var(--red)':isClose?'var(--text3)':dir==='buy'?'var(--green)':'var(--red)';
+    const icon = isBlock?'🚫':isClose?'⬛':dir==='buy'?'🟢':'🔴';
+    const reason = isBlock&&row.reason?` — ${row.reason}`:'';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+      <span style="font-size:14px;flex-shrink:0">${icon}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);flex-shrink:0;white-space:nowrap">${t}</span>
+      <span style="font-size:12px;font-weight:700;color:${color};flex-shrink:0">${row.ticker} ${(row.direction||'').toUpperCase()}</span>
+      <span style="font-size:11px;color:${isBlock?'var(--red)':'var(--text3)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${isBlock?'BLOCKED'+reason:'ALLOWED'}</span>
+    </div>`;
+  }).join('');
+}
 
-const fullTbody=document.getElementById('fullSignals');
-signals.forEach(s=>{
-  const tr=document.createElement('tr');
-  tr.innerHTML='<td style="color:var(--text3);font-family:\'JetBrains Mono\',monospace;font-size:12px">'+s.time+'</td><td style="font-weight:700;color:var(--text)">'+s.inst+'</td><td>'+dirCell(s.dir)+'</td><td style="font-family:\'JetBrains Mono\',monospace;font-size:12px;color:var(--text2)">'+s.entry+'</td><td>'+outcomeCell(s.outcome)+'</td><td style="color:var(--green);font-size:12px">✓ Delivered</td>';
-  fullTbody.appendChild(tr);
-});
+// Recent delivery log
+async function loadRecentDeliveries(){
+  const r = await fetch(`${SB_URL}/rest/v1/signal_delivery_log?select=ticker,action,delivered,http_status,error_msg,attempted_at&order=attempted_at.desc&limit=10`,{headers:HEADERS});
+  const rows = await r.json();
+  const tbody = document.getElementById('recentSignals');
+  if (!tbody) return;
+  const fullTbody = document.getElementById('fullSignals');
+  [tbody, fullTbody].forEach(el => {
+    if (!el) return;
+    if (!rows.length){el.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text3)">No deliveries yet</td></tr>';return;}
+    el.innerHTML = rows.map(row=>{
+      const t = new Date(row.attempted_at).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+      const dir = (row.action||'').toLowerCase();
+      const dirBadge = dir==='close'?`<span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(100,116,139,.1);color:var(--text3)">CLOSE</span>`:
+        dir==='buy'?`<span class="dir-badge buy">BUY</span>`:`<span class="dir-badge sell">SELL</span>`;
+      const delivBadge = row.delivered?
+        `<span style="color:var(--green);font-size:12px;font-weight:600">✓ ${row.http_status||'OK'}</span>`:
+        `<span style="color:var(--red);font-size:12px;font-weight:600">✗ ${row.error_msg||row.http_status||'err'}</span>`;
+      return `<tr><td style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:12px">${t}</td><td style="font-weight:700;color:var(--text)">${row.ticker}</td><td>${dirBadge}</td><td><span class="outcome-badge open">—</span></td><td>${delivBadge}</td></tr>`;
+    }).join('');
+  });
+}
+
+// Load stats
+async function loadStats(){
+  const [sigR, delivR] = await Promise.all([
+    fetch(`${SB_URL}/rest/v1/signal_log?select=id&decision=eq.ALLOW&direction=neq.close&timestamp=gte.${new Date().toISOString().slice(0,10)}`,{headers:HEADERS}),
+    fetch(`${SB_URL}/rest/v1/signal_log?select=id&decision=eq.ALLOW&direction=neq.close&timestamp=gte.${new Date(Date.now()-30*86400000).toISOString()}`,{headers:HEADERS}),
+  ]);
+  const today = (await sigR.json()).length;
+  const month = (await delivR.json()).length;
+  document.querySelector('#page-overview .stats-row').innerHTML = `
+    <div class="stat-card"><div class="label">Signals Today</div><div class="value">${today}</div></div>
+    <div class="stat-card"><div class="label">This Month</div><div class="value">${month}</div></div>
+    <div class="stat-card"><div class="label">Portfolio WR</div><div class="value green" id="liveWR">—</div></div>
+    <div class="stat-card"><div class="label">Status</div><div class="value ${isPaused?'amber':'green'}" id="statusVal">${isPaused?'PAUSED':'ACTIVE'}</div></div>`;
+
+  // Live WR
+  const wrR = await fetch(`${SB_URL}/rest/v1/signal_log?select=outcome&decision=eq.ALLOW&direction=neq.close&outcome=in.(WIN,LOSS)`,{headers:HEADERS});
+  const outcomes = await wrR.json();
+  if (outcomes.length){
+    const wr = (outcomes.filter(o=>o.outcome==='WIN').length/outcomes.length*100).toFixed(1);
+    const el = document.getElementById('liveWR');
+    if(el) el.textContent = wr+'%';
+  }
+}
+
+// Kill switch
+async function togglePause(){
+  const btn = document.getElementById('killSwitchBtn');
+  isPaused = !isPaused;
+  btn.textContent = isPaused ? '▶ Resume Signals' : '⏸ Pause Signals';
+  btn.style.background = isPaused ? 'rgba(52,211,153,.1)' : 'rgba(248,113,113,.1)';
+  btn.style.color = isPaused ? 'var(--green)' : 'var(--red)';
+  btn.style.borderColor = isPaused ? 'rgba(52,211,153,.3)' : 'rgba(248,113,113,.3)';
+  // Update Supabase active flag via token
+  if (token) {
+    await fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}`,{
+      method:'PATCH',
+      headers:{...HEADERS,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({active:!isPaused})
+    });
+  }
+  const statusVal = document.getElementById('statusVal');
+  if(statusVal){statusVal.textContent=isPaused?'PAUSED':'ACTIVE';statusVal.className='value '+(isPaused?'amber':'green');}
+}
 
 function saveWebhook(){
   const val=document.getElementById('webhookInput').value;
@@ -333,30 +421,18 @@ function saveWebhook(){
   setTimeout(()=>c.style.display='none',2500);
 }
 
-// DD tooltip toggle
-document.getElementById('ddTipIcon')?.addEventListener('mouseenter', () => {
-  document.getElementById('ddTip').style.display = 'block';
-});
-document.getElementById('ddTipIcon')?.addEventListener('mouseleave', () => {
-  document.getElementById('ddTip').style.display = 'none';
-});
+document.getElementById('ddTipIcon')?.addEventListener('mouseenter',()=>{document.getElementById('ddTip').style.display='block';});
+document.getElementById('ddTipIcon')?.addEventListener('mouseleave',()=>{document.getElementById('ddTip').style.display='none';});
 
-// Decay ladder renderer
-function renderDecayLadder(currentRisk) {
-  const levels = [];
-  let r = 1.0;
-  while (r > 0.25) {
-    levels.push(parseFloat(r.toFixed(4)));
-    r = Math.max(0.25, r * 0.85);
-    if (levels.length > 12) break;
-  }
+function renderDecayLadder(currentRisk){
+  const levels=[];let r=1.0;
+  while(r>0.25){levels.push(parseFloat(r.toFixed(4)));r=Math.max(0.25,r*0.85);if(levels.length>12)break;}
   levels.push(0.25);
-  const unique = [...new Set(levels.map(l => parseFloat(l.toFixed(2))))];
-  const el = document.getElementById('decayLadder');
-  if (!el) return;
-  el.innerHTML = unique.map(level => {
-    const isCurrent = Math.abs(level - currentRisk) < 0.02;
-    const pct = (level / 1.0) * 100;
+  const unique=[...new Set(levels.map(l=>parseFloat(l.toFixed(2))))];
+  const el=document.getElementById('decayLadder');if(!el)return;
+  el.innerHTML=unique.map(level=>{
+    const isCurrent=Math.abs(level-currentRisk)<0.02;
+    const pct=(level/1.0)*100;
     return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${isCurrent?'var(--accent)':'var(--text3)'};width:42px;flex-shrink:0;font-weight:${isCurrent?'700':'400'}">${level.toFixed(2)}%</div>
       <div style="flex:1;height:4px;background:rgba(30,58,95,.6);border-radius:2px;overflow:hidden">
@@ -368,11 +444,21 @@ function renderDecayLadder(currentRisk) {
 }
 renderDecayLadder(1.0);
 
-function saveSizing() {
-  const c = document.getElementById('sizingConfirm');
-  c.style.display = 'inline';
-  setTimeout(() => c.style.display = 'none', 2500);
+function saveSizing(){
+  const c=document.getElementById('sizingConfirm');c.style.display='inline';
+  setTimeout(()=>c.style.display='none',2500);
 }
+
+// Init
+if (!token) {
+  const badge = document.getElementById('telemetryBadge');
+  if (badge) badge.innerHTML = '<span style="font-size:11px;color:var(--amber)">⏱ 5-min delay · <a href='login.html' style='color:var(--accent)'>Subscribe for live access</a></span>';
+}
+renderDomBlocks();
+loadTelemetry();
+loadRecentDeliveries();
+loadStats();
+setInterval(()=>{loadTelemetry();loadRecentDeliveries();loadStats();},60000);
 </script>
 </body>
 </html>
