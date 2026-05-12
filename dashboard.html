@@ -166,17 +166,15 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
         <thead><tr><th>Time</th><th>Instrument</th><th>Direction</th><th>Outcome</th><th>Delivery</th></tr></thead>
         <tbody id="recentSignals"></tbody>
       </table>
-    </div>
-  </div>
+    </div><!-- /recent deliveries card -->
 
-  </div>
+  </div><!-- /page-overview -->
 
   <!-- SIGNALS PAGE -->
   <div class="page" id="page-signals">
     <div class="page-title">Signal Log</div>
     <div class="page-sub" style="margin-bottom:20px">All signals forwarded to your webhook since you joined</div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
-    <table class="signal-table" style="border:none;border-radius:0">
+    <table class="signal-table">
       <thead>
         <tr>
           <th>Time (EST)</th>
@@ -188,14 +186,12 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
       </thead>
       <tbody id="fullSignals"><tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text3)">Loading…</td></tr></tbody>
     </table>
-    </div>
   </div>
 
   <!-- SETTINGS PAGE -->
   <div class="page" id="page-settings">
     <div class="page-title">Settings</div>
     <div class="page-sub" style="margin-bottom:24px">Manage your subscription and webhook connection</div>
-    <div style="max-width:720px">
 
     <div class="settings-card">
       <div class="plan-badge">● Active Subscriber</div>
@@ -285,7 +281,6 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
       <div class="desc">Cancel your subscription. You'll retain access until the end of your current billing period.</div>
       <button class="danger-btn">Cancel Subscription</button>
     </div>
-    </div><!-- /max-width -->
   </div>
 
 </div>
