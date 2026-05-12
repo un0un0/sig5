@@ -118,8 +118,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;
 .ticker-wrap{width:100%;overflow:hidden;
   border-top:1px solid rgba(56,189,248,.05);border-bottom:1px solid rgba(56,189,248,.05);
   padding:7px 0;position:relative;z-index:1;margin-bottom:100px}
-.ticker{display:flex;animation:ticker 35s linear infinite;width:max-content}
+.ticker{display:flex;animation:ticker 90s linear infinite;width:max-content}
 .ticker-item{font-family:'JetBrains Mono',monospace;font-size:11px;
+.ticker-sep{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(30,58,95,.6);padding:0 16px}
   color:var(--text3);padding:0 28px;white-space:nowrap;border-right:1px solid var(--border)}
 .ticker-item.win{color:var(--green)}.ticker-item.loss{color:var(--red)}
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -367,11 +368,37 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 
 <!-- TICKER -->
 <div class="ticker-wrap">
-  <div class="ticker">
-    <span class="ticker-item win">US30 BUY ✓ WIN +$312</span><span class="ticker-item loss">NAS100 SELL ✗ LOSS -$187</span><span class="ticker-item win">XAUUSD BUY ✓ WIN +$241</span><span class="ticker-item win">BTCUSD SELL ✓ WIN +$893</span><span class="ticker-item win">XAGUSD BUY ✓ WIN +$412</span><span class="ticker-item win">JPN225 SELL ✓ WIN +$298</span><span class="ticker-item loss">GER40 BUY ✗ LOSS -$201</span><span class="ticker-item win">US30 SELL ✓ WIN +$467</span><span class="ticker-item win">NAS100 BUY ✓ WIN +$534</span><span class="ticker-item win">US500 BUY ✓ WIN +$301</span>
-    <span class="ticker-item win">US30 BUY ✓ WIN +$312</span><span class="ticker-item loss">NAS100 SELL ✗ LOSS -$187</span><span class="ticker-item win">XAUUSD BUY ✓ WIN +$241</span><span class="ticker-item win">BTCUSD SELL ✓ WIN +$893</span><span class="ticker-item win">XAGUSD BUY ✓ WIN +$412</span><span class="ticker-item win">JPN225 SELL ✓ WIN +$298</span><span class="ticker-item loss">GER40 BUY ✗ LOSS -$201</span><span class="ticker-item win">US30 SELL ✓ WIN +$467</span><span class="ticker-item win">NAS100 BUY ✓ WIN +$534</span><span class="ticker-item win">US500 BUY ✓ WIN +$301</span>
+  <div class="ticker" id="liveTicker">
+    <span class="ticker-item" style="color:var(--text3)">Loading live activity…</span>
   </div>
 </div>
+<script>
+(async function initLiveTape(){
+  const SB_URL = 'https://hefsyjljufetlgnccdqf.supabase.co';
+  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZnN5amxqdWZldGxnbmNjZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDQ1OTIsImV4cCI6MjA4OTM4MDU5Mn0.zCsbFdWD1nMo-Czco5UaBgw7roliZQ3iQv4XVLDOtbs';
+  try {
+    // 5-min delay — public facing
+    const cutoff = new Date(Date.now() - 5*60*1000).toISOString();
+    const r = await fetch(`${SB_URL}/rest/v1/signal_log?select=ticker,direction,decision,timestamp&order=timestamp.desc&limit=40&timestamp=lt.${cutoff}`,
+      {headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+    const rows = await r.json();
+    if (!rows||!rows.length) return;
+
+    const items = rows.map(row => {
+      const t = new Date(row.timestamp).toLocaleTimeString('en-US',{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',hour12:true});
+      const isBlock = row.decision==='BLOCK';
+      const isClose = (row.direction||'').toLowerCase()==='close';
+      if (isBlock) return `<span class="ticker-item" style="color:var(--text3)">[${t}] ${row.ticker} — BLOCKED</span><span class="ticker-sep">·</span>`;
+      if (isClose) return `<span class="ticker-item" style="color:var(--text3)">[${t}] ${row.ticker} — CLOSED</span><span class="ticker-sep">·</span>`;
+      return `<span class="ticker-item" style="color:var(--accent)">[${t}] SYSTEM EXECUTED · ${row.ticker} · ACTIVE</span><span class="ticker-sep">·</span>`;
+    }).join('');
+
+    // Duplicate for seamless loop
+    const ticker = document.getElementById('liveTicker');
+    if (ticker) ticker.innerHTML = items + items;
+  } catch(e){ console.warn('Live tape failed:', e.message); }
+})();
+</script>
 
 <!-- DISCLAIMER -->
 <div class="disclaimer">

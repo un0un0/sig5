@@ -678,6 +678,9 @@ async function loadAll() {
 
 loadAll().catch(e => console.warn('Track record error:', e));
 
+// Auto-refresh every 5 minutes
+setInterval(() => loadAll().catch(e => console.warn('Track record refresh error:', e)), 5 * 60 * 1000);
+
 async function submitTrWaitlist(){
   const e=document.getElementById('trEmail');
   if(!e.value||!e.value.includes('@')){e.style.borderColor='var(--red)';return;}
