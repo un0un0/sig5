@@ -118,7 +118,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;
 .ticker-wrap{width:100%;overflow:hidden;
   border-top:1px solid rgba(56,189,248,.05);border-bottom:1px solid rgba(56,189,248,.05);
   padding:7px 0;position:relative;z-index:1;margin-bottom:100px}
-.ticker{display:flex;animation:ticker 90s linear infinite;width:max-content}
+.ticker{display:flex;animation:ticker 150s linear infinite;width:max-content}
 .ticker-item{font-family:'JetBrains Mono',monospace;font-size:11px;
 .ticker-sep{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(30,58,95,.6);padding:0 16px}
   color:var(--text3);padding:0 28px;white-space:nowrap;border-right:1px solid var(--border)}
@@ -1312,5 +1312,10 @@ window.addEventListener('scroll',function(){
   btt.style.display=window.scrollY>400?'flex':'none';
 });
 </script>
+<div style="position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);padding:24px;text-align:center">
+  <p style="font-size:11px;color:var(--text3);max-width:800px;margin:0 auto;line-height:1.7">
+    <strong style="color:var(--text2)">Risk Disclaimer:</strong> Sig5 provides automated trading signal alerts for informational and educational purposes only. Trading financial instruments including forex, indices, commodities and cryptocurrencies involves substantial risk of loss and is not suitable for all investors. Past performance is not indicative of future results. The information provided does not constitute financial advice, investment advice, trading advice or any other form of advice. You are solely responsible for your own trading decisions. Sig5 is not a registered investment advisor. By using our service you acknowledge that you have read and understood this disclaimer.
+  </p>
+</div>
 </body>
 </html>
