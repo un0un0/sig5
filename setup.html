@@ -377,18 +377,14 @@ async function confirmSetup() {
   const btn = document.getElementById('confirmBtn');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
-    await fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}`, {
-      method: 'PATCH',
-      headers: { apikey: SB_KEY, Authorization: 'Bearer '+SB_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-      body: JSON.stringify({
-        drawdown_limit: setupData.dd,
-        webhook_url: setupData.webhook,
-        setup_complete: true,
-        active: true
-      })
+    const r = await fetch(`${SENTRY}/subscriber/complete-setup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, drawdown_limit: setupData.dd, webhook_url: setupData.webhook })
     });
+    const data = await r.json();
+    if (!data.success) throw new Error(data.error || 'Failed');
     goStep(5);
-    updateProgress(5);
     // Mark all dots done
     for (let i=1;i<=4;i++){
       document.getElementById('dot'+i).className='step-dot done';
