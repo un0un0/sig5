@@ -230,7 +230,11 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
         <input type="url" id="webhookInput" placeholder="https://your-copier.com/api/hook/your-token" value="https://webhooktrade.com/api/hook/abc123"/>
         <div class="hint">Accepts WebhookTrade, Copygram, or any service that accepts POST requests with JSON payload.</div>
       </div>
-      <button class="save-btn" onclick="saveWebhook()">Save Webhook URL</button>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <button class="save-btn" onclick="saveWebhook()">Save Webhook URL</button>
+        <button id="testWebhookBtn" onclick="testWebhookSettings()" style="background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:10px;padding:11px 20px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s">Test Webhook</button>
+        <span id="testWebhookResult" style="font-size:13px;display:none"></span>
+      </div>
       <span id="saveConfirm" style="font-size:13px;color:var(--green);margin-left:14px;display:none">✓ Saved</span>
     </div>
 
@@ -305,6 +309,13 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
       <h3>Cancel Subscription</h3>
       <div class="desc">Cancel your subscription. You'll retain access until the end of your current billing period.</div>
       <button class="danger-btn">Cancel Subscription</button>
+    </div>
+
+    <!-- RE-RUN SETUP -->
+    <div class="settings-card" style="border-color:rgba(251,191,36,.15);background:rgba(251,191,36,.03)">
+      <h3 style="color:var(--amber)">Re-run Setup</h3>
+      <div class="desc">Update your drawdown limit or webhook URL. Your current settings will remain active until you complete the wizard again.</div>
+      <button onclick="rerunSetup()" style="background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.25);border-radius:10px;padding:11px 24px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s" id="rerunBtn">Re-run Setup →</button>
     </div>
   </div>
 
@@ -450,6 +461,33 @@ async function togglePause(){
   if(statusVal){statusVal.textContent=isPaused?'PAUSED':'ACTIVE';statusVal.className='value '+(isPaused?'amber':'green');}
 }
 
+async function testWebhookSettings(){
+  const btn = document.getElementById('testWebhookBtn');
+  const result = document.getElementById('testWebhookResult');
+  btn.disabled = true; btn.textContent = 'Testing…';
+  result.style.display = 'none';
+  try {
+    const r = await fetch(`${SENTRY_URL}/subscriber/test`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({token})
+    });
+    const data = await r.json();
+    if (data.success) {
+      result.textContent = `✓ Connected — HTTP ${data.http_status}`;
+      result.style.color = 'var(--green)';
+    } else {
+      result.textContent = `✗ ${data.error}`;
+      result.style.color = 'var(--red)';
+    }
+  } catch(e) {
+    result.textContent = '✗ Could not reach webhook';
+    result.style.color = 'var(--red)';
+  }
+  result.style.display = 'inline';
+  btn.disabled = false; btn.textContent = 'Test Webhook';
+}
+
 function saveWebhook(){
   const val=document.getElementById('webhookInput').value;
   document.getElementById('webhookUrlDisplay').textContent=val+' — saved just now';
@@ -559,6 +597,24 @@ function updateLotTable(){
     const short=(base/(SIG5_STOPS_REF[inst].short*SIG5_DIVISORS_REF[inst])).toFixed(2);
     return `<tr><td style="font-weight:700;color:var(--text)">${inst}</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)">${long}</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)">${short}</td><td style="text-align:right;color:var(--text3)">$${parseInt(base).toLocaleString()}</td></tr>`;
   }).join('');
+}
+
+async function rerunSetup(){
+  const btn = document.getElementById('rerunBtn');
+  btn.disabled = true; btn.textContent = 'Resetting…';
+  try {
+    const r = await fetch(`${SENTRY_URL}/subscriber/reset-setup`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({token})
+    });
+    const data = await r.json();
+    if (data.success) window.location.href = 'setup.html';
+    else throw new Error(data.error);
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Re-run Setup →';
+    alert('Failed to reset setup. Please try again.');
+  }
 }
 
 function saveSizing(){
