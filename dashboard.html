@@ -249,7 +249,7 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
             </span>
           </span>
         </label>
-        <input type="number" id="ddInput" placeholder="e.g. 10000" value="10000" min="100" step="100" style="font-family:'JetBrains Mono',monospace"/>
+        <input type="number" id="ddInput" placeholder="e.g. 10000" value="10000" min="100" step="100" style="font-family:'JetBrains Mono',monospace" oninput="updateLotTable()"/>
         <div style="font-size:11px;color:var(--red);margin-top:6px;line-height:1.6">⚠️ Enter your account's <strong>actual</strong> maximum drawdown limit. Entering an inflated value will result in oversized positions and may breach your account rules. You are solely responsible for the accuracy of this figure.</div>
       </div>
 
@@ -543,6 +543,24 @@ function initRiskTiles(){
 }
 
 
+// Lot reference table
+const SIG5_STOPS_REF={US30:{long:300,short:300},NAS100:{long:125,short:150},US500:{long:50,short:50},JPN225:{long:700,short:225},GER40:{long:75,short:125},BTCUSD:{long:1600,short:1350},XAUUSD:{long:50,short:75},XAGUSD:{long:1,short:1.25}};
+const SIG5_DIVISORS_REF={US30:1,NAS100:1,US500:1,JPN225:1,GER40:1,BTCUSD:1,XAUUSD:100,XAGUSD:4750};
+const SIG5_BASE_RISK_REF={US30:1.0,NAS100:1.0,US500:0.75,JPN225:1.0,GER40:0.5,BTCUSD:1.0,XAUUSD:1.0,XAGUSD:1.0};
+
+function updateLotTable(){
+  const dd=parseFloat(document.getElementById('ddInput')?.value);
+  const tbody=document.getElementById('lotRefTable');
+  if(!tbody)return;
+  if(!dd||dd<100){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text3);padding:12px">Enter a DD limit to see lot sizes</td></tr>';return;}
+  tbody.innerHTML=['US30','NAS100','US500','JPN225','GER40','BTCUSD','XAUUSD','XAGUSD'].map(inst=>{
+    const base=dd*10/100*SIG5_BASE_RISK_REF[inst];
+    const long=(base/(SIG5_STOPS_REF[inst].long*SIG5_DIVISORS_REF[inst])).toFixed(2);
+    const short=(base/(SIG5_STOPS_REF[inst].short*SIG5_DIVISORS_REF[inst])).toFixed(2);
+    return `<tr><td style="font-weight:700;color:var(--text)">${inst}</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)">${long}</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)">${short}</td><td style="text-align:right;color:var(--text3)">$${parseInt(base).toLocaleString()}</td></tr>`;
+  }).join('');
+}
+
 function saveSizing(){
   const c=document.getElementById('sizingConfirm');c.style.display='inline';
   setTimeout(()=>c.style.display='none',2500);
@@ -563,6 +581,7 @@ if (token) {
 }
 renderDomBlocks();
 initRiskTiles();
+updateLotTable();
 loadTelemetry();
 loadRecentDeliveries();
 loadStats();
