@@ -62,11 +62,6 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
       <label>Email address</label>
       <input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email"/>
     </div>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"/>
-      <a href="#" class="forgot">Forgot password?</a>
-    </div>
 
     <button class="login-btn" onclick="handleLogin()">Sign In</button>
 
@@ -80,15 +75,41 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
 </div>
 
 <script>
-function handleLogin(){
-  const email=document.getElementById('loginEmail').value;
-  const pass=document.getElementById('loginPass').value;
-  if(!email||!pass){document.getElementById('errorMsg').style.display='block';return}
-  // In production this would authenticate via Supabase Auth
-  // For now redirect to dashboard (demo)
-  window.location.href='dashboard.html';
+const SENTRY = 'https://sentry.up.railway.app';
+
+async function handleLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const errEl = document.getElementById('errorMsg');
+  errEl.style.display = 'none';
+
+  if (!email) { errEl.textContent = 'Please enter your email address.'; errEl.style.display = 'block'; return; }
+
+  const btn = document.querySelector('.login-btn');
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+
+  try {
+    const r = await fetch(`${SENTRY}/subscriber/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await r.json();
+    if (!r.ok || !data.success) {
+      errEl.textContent = data.error || 'Login failed. Please try again.';
+      errEl.style.display = 'block';
+      btn.textContent = 'Sign In'; btn.disabled = false;
+      return;
+    }
+    // Store token and redirect
+    localStorage.setItem('sig5_token', data.token);
+    window.location.href = data.setup_complete === false ? 'setup.html' : 'dashboard.html';
+  } catch(e) {
+    errEl.textContent = 'Could not connect. Please try again.';
+    errEl.style.display = 'block';
+    btn.textContent = 'Sign In'; btn.disabled = false;
+  }
 }
-document.addEventListener('keydown',function(e){if(e.key==='Enter')handleLogin()});
+document.addEventListener('keydown', function(e){ if(e.key==='Enter') handleLogin(); });
 </script>
 </body>
 </html>
