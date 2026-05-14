@@ -102,6 +102,7 @@ async function handleLogin(){
     }
     // Store token and redirect
     localStorage.setItem('sig5_token', data.token);
+    localStorage.setItem('sig5_sub_id', data.subscriber_id);
     window.location.href = data.setup_complete === false ? 'setup.html' : 'dashboard.html';
   } catch(e) {
     errEl.textContent = 'Could not connect. Please try again.';
