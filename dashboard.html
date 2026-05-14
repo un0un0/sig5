@@ -487,12 +487,27 @@ async function testWebhookSettings(){
   btn.disabled = false; btn.textContent = 'Test Webhook';
 }
 
-function saveWebhook(){
-  const val=document.getElementById('webhookInput').value;
-  document.getElementById('webhookUrlDisplay').textContent=val+' — saved just now';
-  const c=document.getElementById('saveConfirm');
-  c.style.display='inline';
-  setTimeout(()=>c.style.display='none',2500);
+async function saveWebhook(){
+  const val = document.getElementById('webhookInput').value.trim();
+  if (!val || !val.startsWith('http')) { alert('Please enter a valid webhook URL.'); return; }
+  const btn = document.querySelector('.save-btn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  try {
+    const r = await fetch(`${SENTRY_URL}/subscriber/save-webhook`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, webhook_url: val })
+    });
+    const data = await r.json();
+    if (!data.success) throw new Error(data.error);
+    document.getElementById('webhookUrlDisplay').textContent = val + ' — saved just now';
+    const c = document.getElementById('saveConfirm');
+    c.style.display = 'inline';
+    setTimeout(() => c.style.display = 'none', 2500);
+  } catch(e) {
+    alert('Failed to save webhook. Please try again.');
+  }
+  btn.textContent = 'Save Webhook URL'; btn.disabled = false;
 }
 
 document.getElementById('ddTipIcon')?.addEventListener('mouseenter',()=>{document.getElementById('ddTip').style.display='block';});
