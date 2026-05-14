@@ -110,12 +110,15 @@ input.success{border-color:rgba(52,211,153,.5)}
       <div class="step-dot pending" id="dot3">3</div>
       <div class="step-line" id="line3"></div>
       <div class="step-dot pending" id="dot4">4</div>
+      <div class="step-line" id="line4"></div>
+      <div class="step-dot pending" id="dot5">5</div>
     </div>
     <div class="progress-labels">
       <span class="active" id="lbl1">Welcome</span>
       <span id="lbl2">Drawdown</span>
       <span id="lbl3">Webhook</span>
-      <span id="lbl4">Confirm</span>
+      <span id="lbl4">Instruments</span>
+      <span id="lbl5">Confirm</span>
     </div>
   </div>
 
@@ -134,6 +137,10 @@ input.success{border-color:rgba(52,211,153,.5)}
       </div>
       <div class="welcome-step">
         <div class="welcome-step-num">3</div>
+        <div class="welcome-step-text"><strong>Configure broker symbols</strong> — if your broker uses different symbol names or contract sizes (e.g. FTMO's US30.sim), map them here. Most users can skip this.</div>
+      </div>
+      <div class="welcome-step">
+        <div class="welcome-step-num">4</div>
         <div class="welcome-step-text"><strong>Lock your settings</strong> — once confirmed, signals will start flowing to your webhook automatically.</div>
       </div>
     </div>
@@ -186,8 +193,38 @@ input.success{border-color:rgba(52,211,153,.5)}
     </div>
   </div>
 
-  <!-- STEP 4: CONFIRM -->
+  <!-- STEP 4: INSTRUMENTS -->
   <div class="card" id="step4">
+    <div class="card-title">Broker Symbols</div>
+    <div class="card-sub">Most MT5 brokers use the same symbol names as Sig5 — you can skip this step. If your broker uses different symbols or non-standard contract sizes, configure them here. Lot sizes update in real-time as you type.</div>
+
+    <div style="overflow-x:auto">
+      <table class="lot-table" id="instrTable">
+        <thead><tr>
+          <th>Sig5 Ticker</th>
+          <th>Broker Symbol</th>
+          <th>Lot Divisor</th>
+          <th style="text-align:right">Long Lots</th>
+          <th style="text-align:right">Short Lots</th>
+        </tr></thead>
+        <tbody id="instrBody"></tbody>
+      </table>
+    </div>
+
+    <div class="lot-note" style="margin-top:12px">
+      <strong>Lot Divisor</strong> is the point value per lot — only change this if your broker uses a non-standard contract size. XAUUSD default is 100, XAGUSD is 4750, all others are 1.
+      Verify your first trade on each instrument before going live.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(3)">← Back</button>
+      <button class="btn-primary" style="background:var(--surface2);color:var(--text2);border:1px solid var(--border);flex:0;padding:13px 20px" onclick="goStep(5)">Skip</button>
+      <button class="btn-primary" id="instrNext" onclick="saveInstruments()">Save & Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: CONFIRM -->
+  <div class="card" id="step5">
     <div class="card-title">Confirm & Lock</div>
     <div class="card-sub">Review your settings below. Once you confirm, these values will be locked in. You can re-run setup anytime from the Settings page if anything changes.</div>
 
@@ -198,13 +235,13 @@ input.success{border-color:rgba(52,211,153,.5)}
     </div>
 
     <div class="btn-row">
-      <button class="btn-back" onclick="goStep(3)">← Back</button>
+      <button class="btn-back" onclick="goStep(4)">← Back</button>
       <button class="btn-primary" id="confirmBtn" onclick="confirmSetup()">Confirm & Activate →</button>
     </div>
   </div>
 
-  <!-- STEP 5: DONE -->
-  <div class="card" id="step5">
+  <!-- STEP 6: DONE -->
+  <div class="card" id="step6">
     <div style="text-align:center;padding:20px 0">
       <div class="success-icon">✅</div>
       <div class="card-title" style="text-align:center;margin-bottom:8px">You're all set!</div>
@@ -250,17 +287,19 @@ function goStep(n) {
   document.getElementById('step' + n).classList.add('active');
   currentStep = n;
   updateProgress(n);
-  if (n === 4) buildSummary();
+  if (n === 4) buildInstrTable();
+  if (n === 5) buildSummary();
 }
 
 function updateProgress(n) {
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 5; i++) {
     const dot  = document.getElementById('dot' + i);
     const lbl  = document.getElementById('lbl' + i);
     const line = document.getElementById('line' + i);
-    if (i < n)       { dot.className='step-dot done'; dot.textContent='✓'; lbl.className='done'; if(line) line.className='step-line done'; }
-    else if (i === n){ dot.className='step-dot active'; dot.textContent=i; lbl.className='active'; }
-    else             { dot.className='step-dot pending'; dot.textContent=i; lbl.className=''; }
+    if (!dot) continue;
+    if (i < n)       { dot.className='step-dot done'; dot.textContent='✓'; if(lbl) lbl.className='done'; if(line) line.className='step-line done'; }
+    else if (i === n){ dot.className='step-dot active'; dot.textContent=i; if(lbl) lbl.className='active'; }
+    else             { dot.className='step-dot pending'; dot.textContent=i; if(lbl) lbl.className=''; if(line && line.className!=='step-line') line.className='step-line'; }
   }
 }
 
@@ -384,11 +423,10 @@ async function confirmSetup() {
     });
     const data = await r.json();
     if (!data.success) throw new Error(data.error || 'Failed');
-    goStep(5);
-    // Mark all dots done
-    for (let i=1;i<=4;i++){
-      document.getElementById('dot'+i).className='step-dot done';
-      document.getElementById('dot'+i).textContent='✓';
+    goStep(6);
+    for (let i=1;i<=5;i++){
+      const dot = document.getElementById('dot'+i);
+      if(dot){ dot.className='step-dot done'; dot.textContent='✓'; }
       if(document.getElementById('line'+i)) document.getElementById('line'+i).className='step-line done';
     }
   } catch(e) {
@@ -397,8 +435,82 @@ async function confirmSetup() {
   }
 }
 
+// Instrument config
+let instrConfig = {}; // { ticker: { broker_symbol, lot_divisor } }
+
+function buildInstrTable() {
+  const dd = setupData.dd || 10000;
+  const tbody = document.getElementById('instrBody');
+  if (!tbody) return;
+  tbody.innerHTML = INSTRUMENTS.map(inst => {
+    const cfg = instrConfig[inst] || {};
+    const sym = cfg.broker_symbol || inst;
+    const div = cfg.lot_divisor  !== undefined ? cfg.lot_divisor : (SIG5_DIVISORS[inst] || 1);
+    const long  = calcLotsPreview(dd, inst, 'long',  parseFloat(div) || 1);
+    const short = calcLotsPreview(dd, inst, 'short', parseFloat(div) || 1);
+    return `<tr>
+      <td style="font-weight:700;color:var(--text)">${inst}</td>
+      <td><input type="text" style="width:130px;padding:7px 10px;font-size:12px" value="${sym}" placeholder="${inst}" oninput="onInstrInput('${inst}','symbol',this.value)" /></td>
+      <td><input type="number" style="width:90px;padding:7px 10px;font-size:12px;font-family:'JetBrains Mono',monospace" value="${div}" min="0.01" step="0.01" oninput="onInstrInput('${inst}','divisor',this.value)" /></td>
+      <td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)" id="prev_long_${inst}">${long}</td>
+      <td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)" id="prev_short_${inst}">${short}</td>
+    </tr>`;
+  }).join('');
+}
+
+function calcLotsPreview(dd, ticker, dir, divisor) {
+  const base  = dd * SUB_BASE_RISK_PCT / 100 * (SIG5_BASE_RISK[ticker] || 1.0);
+  const stop  = SIG5_STOPS[ticker][dir];
+  const pv    = divisor || SIG5_DIVISORS[ticker] || 1;
+  return (base / (stop * pv)).toFixed(2);
+}
+
+function onInstrInput(ticker, field, value) {
+  if (!instrConfig[ticker]) instrConfig[ticker] = { broker_symbol: ticker, lot_divisor: SIG5_DIVISORS[ticker] || 1 };
+  if (field === 'symbol')  instrConfig[ticker].broker_symbol = value || ticker;
+  if (field === 'divisor') instrConfig[ticker].lot_divisor = parseFloat(value) || SIG5_DIVISORS[ticker] || 1;
+  // Live update lot preview
+  const div = parseFloat(instrConfig[ticker].lot_divisor) || 1;
+  const dd  = setupData.dd || 10000;
+  const lEl = document.getElementById(`prev_long_${ticker}`);
+  const sEl = document.getElementById(`prev_short_${ticker}`);
+  if (lEl) lEl.textContent = calcLotsPreview(dd, ticker, 'long',  div);
+  if (sEl) sEl.textContent = calcLotsPreview(dd, ticker, 'short', div);
+}
+
+async function saveInstruments() {
+  const btn = document.getElementById('instrNext');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  // Only save rows that differ from defaults
+  const rows = INSTRUMENTS.filter(inst => {
+    const cfg = instrConfig[inst];
+    if (!cfg) return false;
+    const defaultSym = inst;
+    const defaultDiv = SIG5_DIVISORS[inst] || 1;
+    return cfg.broker_symbol !== defaultSym || parseFloat(cfg.lot_divisor) !== defaultDiv;
+  }).map(inst => ({ ticker: inst, broker_symbol: instrConfig[inst].broker_symbol, lot_divisor: instrConfig[inst].lot_divisor }));
+
+  if (rows.length > 0) {
+    try {
+      const r = await fetch(`${SENTRY}/subscriber/save-instruments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, instruments: rows })
+      });
+      const data = await r.json();
+      if (!data.success) throw new Error(data.error || 'Failed');
+    } catch(e) {
+      btn.disabled = false; btn.textContent = 'Save & Continue →';
+      alert('Failed to save instrument config. Please try again.');
+      return;
+    }
+  }
+  btn.disabled = false; btn.textContent = 'Save & Continue →';
+  goStep(5);
+}
+
 // Pre-populate DD if already set
-fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}&select=drawdown_limit,webhook_url,setup_complete`, {
+fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}&select=id,drawdown_limit,webhook_url,setup_complete`, {
   headers: { apikey: SB_KEY, Authorization: 'Bearer '+SB_KEY }
 }).then(r=>r.json()).then(d => {
   if (d[0]?.drawdown_limit) {
@@ -406,10 +518,20 @@ fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}&select=drawdown_limit,web
     setupData.dd = parseFloat(d[0].drawdown_limit);
     updateLotTable();
   }
-  // Show cancel link if re-running setup (already completed before)
   if (d[0]?.setup_complete) {
     document.getElementById('cancelLink').style.display = 'block';
     document.querySelector('#step1 .card-sub').textContent = 'You\'re re-running setup. Your previous values have been pre-populated. Complete all steps to update your settings, or click Back to Dashboard to cancel.';
+  }
+  // Pre-populate instrument config if exists
+  const subId = d[0]?.id;
+  if (subId) {
+    fetch(`${SB_URL}/rest/v1/subscriber_instrument_config?subscriber_id=eq.${subId}&select=sig5_ticker,broker_symbol,lot_divisor`, {
+      headers: { apikey: SB_KEY, Authorization: 'Bearer '+SB_KEY }
+    }).then(r=>r.json()).then(rows => {
+      rows.forEach(row => {
+        instrConfig[row.sig5_ticker] = { broker_symbol: row.broker_symbol, lot_divisor: row.lot_divisor };
+      });
+    }).catch(()=>{});
   }
 }).catch(()=>{});
 </script>
