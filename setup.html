@@ -467,19 +467,46 @@ function calcLotsPreview(dd, ticker, dir, divisor) {
 
 function onInstrInput(ticker, field, value) {
   if (!instrConfig[ticker]) instrConfig[ticker] = { broker_symbol: ticker, lot_divisor: SIG5_DIVISORS[ticker] || 1 };
-  if (field === 'symbol')  instrConfig[ticker].broker_symbol = value || ticker;
-  if (field === 'divisor') instrConfig[ticker].lot_divisor = parseFloat(value) || SIG5_DIVISORS[ticker] || 1;
+  if (field === 'symbol') instrConfig[ticker].broker_symbol = value.trim() || ticker;
+  if (field === 'divisor') {
+    const parsed = parseFloat(value);
+    instrConfig[ticker].lot_divisor = (parsed > 0) ? parsed : SIG5_DIVISORS[ticker] || 1;
+  }
   // Live update lot preview
   const div = parseFloat(instrConfig[ticker].lot_divisor) || 1;
   const dd  = setupData.dd || 10000;
   const lEl = document.getElementById(`prev_long_${ticker}`);
   const sEl = document.getElementById(`prev_short_${ticker}`);
-  if (lEl) lEl.textContent = calcLotsPreview(dd, ticker, 'long',  div);
-  if (sEl) sEl.textContent = calcLotsPreview(dd, ticker, 'short', div);
+  if (lEl) {
+    const lots = calcLotsPreview(dd, ticker, 'long', div);
+    lEl.textContent = lots;
+    lEl.style.color = parseFloat(lots) > 50 ? 'var(--red)' : 'var(--accent)';
+  }
+  if (sEl) {
+    const lots = calcLotsPreview(dd, ticker, 'short', div);
+    sEl.textContent = lots;
+    sEl.style.color = parseFloat(lots) > 50 ? 'var(--red)' : 'var(--accent)';
+  }
 }
 
 async function saveInstruments() {
   const btn = document.getElementById('instrNext');
+
+  // Validate all rows
+  const errors = [];
+  INSTRUMENTS.forEach(inst => {
+    const cfg = instrConfig[inst];
+    if (!cfg) return; // untouched = default = fine
+    const sym = (cfg.broker_symbol || '').trim();
+    const div = parseFloat(cfg.lot_divisor);
+    if (!sym) errors.push(`${inst}: broker symbol cannot be empty`);
+    if (!div || div <= 0) errors.push(`${inst}: lot divisor must be greater than 0`);
+    if (div < 0.01) errors.push(`${inst}: lot divisor ${div} is dangerously small — this would create extremely large positions`);
+    const maxLots = calcLotsPreview(setupData.dd || 10000, inst, 'long', div);
+    if (parseFloat(maxLots) > 50) errors.push(`${inst}: resulting lot size ${maxLots} exceeds 50 — please verify your lot divisor`);
+  });
+  if (errors.length) { alert('Please fix the following:\n\n' + errors.join('\n')); return; }
+
   btn.disabled = true; btn.textContent = 'Saving…';
   // Only save rows that differ from defaults
   const rows = INSTRUMENTS.filter(inst => {
@@ -487,8 +514,8 @@ async function saveInstruments() {
     if (!cfg) return false;
     const defaultSym = inst;
     const defaultDiv = SIG5_DIVISORS[inst] || 1;
-    return cfg.broker_symbol !== defaultSym || parseFloat(cfg.lot_divisor) !== defaultDiv;
-  }).map(inst => ({ ticker: inst, broker_symbol: instrConfig[inst].broker_symbol, lot_divisor: instrConfig[inst].lot_divisor }));
+    return (cfg.broker_symbol || '').trim() !== defaultSym || parseFloat(cfg.lot_divisor) !== defaultDiv;
+  }).map(inst => ({ ticker: inst, broker_symbol: (instrConfig[inst].broker_symbol || inst).trim(), lot_divisor: parseFloat(instrConfig[inst].lot_divisor) }));
 
   if (rows.length > 0) {
     try {
@@ -529,7 +556,7 @@ fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}&select=id,drawdown_limit,
       headers: { apikey: SB_KEY, Authorization: 'Bearer '+SB_KEY }
     }).then(r=>r.json()).then(rows => {
       rows.forEach(row => {
-        instrConfig[row.sig5_ticker] = { broker_symbol: row.broker_symbol, lot_divisor: row.lot_divisor };
+        instrConfig[row.sig5_ticker] = { broker_symbol: row.broker_symbol, lot_divisor: parseFloat(row.lot_divisor) || (SIG5_DIVISORS[row.sig5_ticker] || 1) };
       });
     }).catch(()=>{});
   }

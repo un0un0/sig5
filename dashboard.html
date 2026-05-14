@@ -611,7 +611,8 @@ function initRiskTiles(){
 const SIG5_STOPS_REF={US30:{long:300,short:300},NAS100:{long:125,short:150},US500:{long:50,short:50},JPN225:{long:700,short:225},GER40:{long:75,short:125},BTCUSD:{long:1600,short:1350},XAUUSD:{long:50,short:75},XAGUSD:{long:1,short:1.25}};
 const SIG5_DIVISORS_REF={US30:1,NAS100:1,US500:1,JPN225:1,GER40:1,BTCUSD:1,XAUUSD:100,XAGUSD:4750};
 const SIG5_BASE_RISK_REF={US30:1.0,NAS100:1.0,US500:0.75,JPN225:1.0,GER40:0.5,BTCUSD:1.0,XAUUSD:1.0,XAGUSD:1.0};
-let subDivisors = {}; // populated on load from subscriber_instrument_config
+let subDivisors = {};
+let subConfig = {}; // { ticker: { broker_symbol, lot_divisor } }
 
 function updateLotTable(){
   const dd=parseFloat(document.getElementById('ddInput')?.value);
@@ -620,11 +621,23 @@ function updateLotTable(){
   if(!dd||dd<100){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text3);padding:12px">Enter a DD limit to see lot sizes</td></tr>';return;}
   tbody.innerHTML=['US30','NAS100','US500','JPN225','GER40','BTCUSD','XAUUSD','XAGUSD'].map(inst=>{
     const base=dd*10/100*SIG5_BASE_RISK_REF[inst];
-    const divisor=subDivisors[inst]||SIG5_DIVISORS_REF[inst];
+    const cfg=subConfig[inst];
+    const divisor=cfg?parseFloat(cfg.lot_divisor)||SIG5_DIVISORS_REF[inst]:SIG5_DIVISORS_REF[inst];
     const long=(base/(SIG5_STOPS_REF[inst].long*divisor)).toFixed(2);
     const short=(base/(SIG5_STOPS_REF[inst].short*divisor)).toFixed(2);
-    const customTag=subDivisors[inst]?`<span style="font-size:9px;color:var(--amber);margin-left:4px">custom</span>`:'';
-    return `<tr><td style="font-weight:700;color:var(--text)">${inst}${customTag}</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)">${long}</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)">${short}</td><td style="text-align:right;color:var(--text3)">$${parseInt(base).toLocaleString()}</td></tr>`;
+    const symDiffers  = cfg && cfg.broker_symbol && cfg.broker_symbol !== inst;
+    const divDiffers  = cfg && parseFloat(cfg.lot_divisor) !== SIG5_DIVISORS_REF[inst];
+    const customLines = [
+      symDiffers ? `→ ${cfg.broker_symbol}` : '',
+      divDiffers ? `÷ ${cfg.lot_divisor}` : ''
+    ].filter(Boolean);
+    const customInfo = customLines.length ? `<div style="font-size:10px;color:var(--amber);margin-top:2px;font-family:'JetBrains Mono',monospace">${customLines.join(' · ')}</div>` : '';
+    return `<tr>
+      <td style="font-weight:700;color:var(--text)">${inst}${customInfo}</td>
+      <td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)">${long}</td>
+      <td style="text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent)">${short}</td>
+      <td style="text-align:right;color:var(--text3)">$${parseInt(base).toLocaleString()}</td>
+    </tr>`;
   }).join('');
 }
 
@@ -737,9 +750,12 @@ if (token && subId) {
         updateLotTable();
       }
     }).catch(()=>{});
-  fetch(`${SB_URL}/rest/v1/subscriber_instrument_config?subscriber_id=eq.${subId}&select=sig5_ticker,lot_divisor`, { headers: HEADERS })
+  fetch(`${SB_URL}/rest/v1/subscriber_instrument_config?subscriber_id=eq.${subId}&select=sig5_ticker,broker_symbol,lot_divisor`, { headers: HEADERS })
     .then(r=>r.json()).then(rows => {
-      rows.forEach(row => { subDivisors[row.sig5_ticker] = parseFloat(row.lot_divisor) || 1; });
+      rows.forEach(row => {
+        subDivisors[row.sig5_ticker] = parseFloat(row.lot_divisor) || 1;
+        subConfig[row.sig5_ticker]   = { broker_symbol: row.broker_symbol, lot_divisor: parseFloat(row.lot_divisor) || 1 };
+      });
       updateLotTable();
     }).catch(()=>{});
 }
