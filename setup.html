@@ -392,7 +392,8 @@ async function testWebhook() {
       setupData.webhookTested = true;
       document.getElementById('webhookNext').disabled = false;
     } else {
-      throw new Error(data.error || 'Unknown error');
+      const errMsg = data.error || (data.http_status ? `HTTP ${data.http_status} — webhook URL is not accepting signals` : 'Unknown error');
+      throw new Error(errMsg);
     }
   } catch(e) {
     hint.textContent = `✗ ${e.message}. Check your webhook URL and try again.`;
