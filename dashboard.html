@@ -370,7 +370,7 @@ function renderDomBlocks(){
 async function loadTelemetry(){
   try {
   const cutoff = new Date(Date.now() - (token ? 0 : 5*60*1000)).toISOString();
-  const r = await fetch(`${SB_URL}/rest/v1/signal_log?select=ticker,direction,decision,reason,flags,timestamp&order=timestamp.desc&limit=20&timestamp=lt.${cutoff}`,{headers:HEADERS});
+  const r = await fetch(`${SB_URL}/rest/v1/signal_log?select=ticker,direction,decision,reason,flags,timestamp&order=timestamp.desc&limit=20&timestamp=lt.${cutoff}&direction=neq.close`,{headers:HEADERS});
   const rows = await r.json();
   const feed = document.getElementById('telemetryFeed');
   if (!rows.length){feed.innerHTML='<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">No activity yet</div>';return;}
