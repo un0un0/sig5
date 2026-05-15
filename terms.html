@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms & Conditions — Sig5</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060d1a;--surface:#0a1525;--surface2:#0f1e31;--border:#1a3350;
+  --accent:#38bdf8;--accent2:#0ea5e9;--green:#34d399;--red:#f87171;--amber:#fbbf24;
+  --text:#f0f6fc;--text2:#8ba8c4;--text3:#3d5a78;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;line-height:1.6}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 48px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(6,13,26,.92);backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(56,189,248,.07)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:32px;height:32px;background:var(--accent);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;color:var(--bg)}
+.logo-text{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.logo-text span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-link{font-size:13px;font-weight:500;color:var(--text2);text-decoration:none;transition:color .2s}
+.nav-link:hover{color:var(--text)}
+.nav-btn{font-size:13px;font-weight:600;color:var(--bg);background:var(--accent);
+  border:none;border-radius:6px;padding:8px 18px;cursor:pointer;text-decoration:none;
+  font-family:'Space Grotesk',sans-serif}
+
+.wrap{max-width:760px;margin:0 auto;padding:120px 24px 80px}
+
+.page-kicker{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
+  background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.15);
+  border-radius:4px;padding:5px 12px;display:inline-block;margin-bottom:20px}
+
+h1{font-size:36px;font-weight:700;letter-spacing:-.5px;color:var(--text);margin-bottom:8px}
+.last-updated{font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:48px}
+
+.section{margin-bottom:40px}
+.section h2{font-size:16px;font-weight:700;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:14px;padding-bottom:10px;
+  border-bottom:1px solid var(--border)}
+.section p{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:12px}
+.section p:last-child{margin-bottom:0}
+.section ul{padding-left:20px;margin-bottom:12px}
+.section ul li{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:6px}
+.section ul li:last-child{margin-bottom:0}
+.section ul li::marker{color:var(--accent)}
+
+.highlight-box{background:rgba(56,189,248,.04);border:1px solid rgba(56,189,248,.12);
+  border-radius:10px;padding:16px 20px;margin-bottom:16px}
+.highlight-box p{margin-bottom:0}
+
+.warning-box{background:rgba(251,191,36,.04);border:1px solid rgba(251,191,36,.15);
+  border-radius:10px;padding:16px 20px;margin-bottom:16px}
+.warning-box p{color:var(--amber)!important;margin-bottom:0}
+
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:24px;margin-bottom:48px}
+.toc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin-bottom:14px}
+.toc ol{padding-left:20px}
+.toc ol li{margin-bottom:6px}
+.toc ol li a{font-size:13px;color:var(--text2);text-decoration:none;transition:color .2s}
+.toc ol li a:hover{color:var(--accent)}
+
+footer{background:var(--surface);border-top:1px solid var(--border);padding:24px;text-align:center}
+footer p{font-size:11px;color:var(--text3);max-width:800px;margin:0 auto;line-height:1.7}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">S5</div>
+    <span class="logo-text">SIG<span>5</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="track-record.html" class="nav-link">Live Track Record</a>
+    <a href="index.html#faq" class="nav-link">FAQ</a>
+    <a href="login.html" class="nav-btn">Sign In</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="page-kicker">Legal</div>
+  <h1>Terms & Conditions</h1>
+  <p class="last-updated">Last updated: May 15, 2026</p>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#s1">Software License</a></li>
+      <li><a href="#s2">No Financial Advice</a></li>
+      <li><a href="#s3">Prop Firm Use Only</a></li>
+      <li><a href="#s4">Jurisdiction & Regulatory Compliance</a></li>
+      <li><a href="#s5">No Liability</a></li>
+      <li><a href="#s6">Webhook Delivery</a></li>
+      <li><a href="#s7">Subscription & Cancellation</a></li>
+      <li><a href="#s8">Account Termination</a></li>
+      <li><a href="#s9">Modifications</a></li>
+      <li><a href="#s10">Contact</a></li>
+    </ol>
+  </div>
+
+  <div class="warning-box">
+    <p>⚠ Please read these Terms carefully before using Sig5. By subscribing or using our service in any way, you confirm that you have read, understood, and agreed to these Terms in full.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="s1">
+    <h2>1. Software License</h2>
+    <p>Your Sig5 subscription constitutes a <strong style="color:var(--text)">software API license</strong>. You are paying for access to a webhook signal routing system — a software tool that forwards JSON payloads to a URL you configure. This is not a managed account service, fund, investment club, or advisory relationship of any kind.</p>
+    <p>Sig5 does not access, control, manage, or interact with your trading account at any time. The webhook URL you provide is the sole point of integration. What happens at that URL — and on your account — is entirely your responsibility.</p>
+    <p>The license is non-transferable, single-user, and may not be resold or shared.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" id="s2">
+    <h2>2. No Financial Advice</h2>
+    <p>Nothing provided by Sig5 — including signals, performance data, win probabilities, ML scores, commentary, or any other content — constitutes financial advice, investment advice, trading advice, or a recommendation to buy or sell any financial instrument.</p>
+    <p>Sig5 is not a registered investment advisor (RIA), commodity trading advisor (CTA), broker-dealer, or financial institution. We are not regulated by the SEC, CFTC, FCA, ASIC, or any other financial regulatory body.</p>
+    <div class="highlight-box">
+      <p>All signals are generated by an automated rule-based system. They are provided for informational purposes only. You are solely responsible for all trading decisions made using this software.</p>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" id="s3">
+    <h2>3. Prop Firm Use Only</h2>
+    <p>Sig5 is designed and intended exclusively for use with <strong style="color:var(--text)">simulated prop firm evaluation accounts</strong> (such as FTMO, The5ers, Lark Funding, and similar platforms). These accounts use simulated capital and do not involve real regulated brokerage funds.</p>
+    <p>Sig5 is not intended for, and should not be used with:</p>
+    <ul>
+      <li>Live retail brokerage accounts holding real client funds</li>
+      <li>Accounts regulated by the SEC, FINRA, FCA, or equivalent bodies</li>
+      <li>Any account where the subscriber is acting on behalf of third parties</li>
+    </ul>
+    <p>By subscribing you confirm that your use of Sig5 is limited to simulated prop firm evaluation accounts or personal trading accounts where you are the sole beneficial owner and bear sole responsibility for compliance.</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" id="s4">
+    <h2>4. Jurisdiction & Regulatory Compliance</h2>
+    <p>CFD (Contract for Difference) and certain derivative instruments are restricted or prohibited in some jurisdictions, including for retail traders in the United States. It is your sole responsibility to determine whether your use of Sig5 and the instruments traded are lawful in your jurisdiction.</p>
+    <p>Sig5 makes no representation that its service is appropriate or legal in your country of residence. By subscribing you acknowledge that:</p>
+    <ul>
+      <li>You have independently verified that your use of this software complies with all applicable laws and regulations in your jurisdiction</li>
+      <li>You are not relying on Sig5 for legal or compliance guidance</li>
+      <li>You assume full legal responsibility for your use of the service</li>
+    </ul>
+    <p>Sig5 reserves the right to restrict access to users from specific jurisdictions at any time without notice.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" id="s5">
+    <h2>5. No Liability</h2>
+    <p>To the maximum extent permitted by applicable law, Sig5, its operators, employees, and affiliates shall not be liable for any loss or damage of any kind arising from your use of the service, including but not limited to:</p>
+    <ul>
+      <li>Trading losses on any account, simulated or otherwise</li>
+      <li>Failed prop firm evaluations</li>
+      <li>Missed, delayed, or incorrectly sized signals</li>
+      <li>Webhook delivery failures or execution errors</li>
+      <li>System downtime, server outages, or infrastructure failures</li>
+      <li>Any action taken or not taken based on signal data</li>
+    </ul>
+    <div class="highlight-box">
+      <p>Past performance on simulated accounts is not indicative of future results. Strategy performance can and will vary. Drawdown periods are expected and do not constitute grounds for refunds or claims.</p>
+    </div>
+    <p>In no event shall Sig5's aggregate liability to you exceed the total subscription fees paid in the 30 days preceding the claim.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="section" id="s6">
+    <h2>6. Webhook Delivery</h2>
+    <p>Sig5 routes signals to the webhook URL you provide on a best-efforts basis. We do not guarantee:</p>
+    <ul>
+      <li>100% signal delivery or uptime</li>
+      <li>Specific latency or execution timing</li>
+      <li>Compatibility with any particular execution tool or broker integration</li>
+      <li>That signals will be received, processed, or executed by your downstream tool</li>
+    </ul>
+    <p>You are responsible for ensuring your webhook endpoint is valid, active, and correctly configured to receive and act on Sig5 signal payloads. Sig5 is not responsible for failures arising from invalid webhook URLs, expired credentials, or misconfigured execution tools on your end.</p>
+    <p>Signal delivery logs are available in your dashboard. It is your responsibility to monitor delivery status and notify us of persistent failures.</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" id="s7">
+    <h2>7. Subscription & Cancellation</h2>
+    <p>Sig5 subscriptions are billed monthly via Stripe. By subscribing you authorise recurring monthly charges until you cancel.</p>
+    <ul>
+      <li><strong style="color:var(--text)">Cancellation:</strong> You may cancel at any time from your account settings. Access continues until the end of the current billing period. No partial refunds are issued for unused days.</li>
+      <li><strong style="color:var(--text)">Refunds:</strong> Subscription fees are non-refundable except where required by applicable law. We do not offer refunds based on trading performance or account outcomes.</li>
+      <li><strong style="color:var(--text)">Price changes:</strong> We reserve the right to change subscription pricing with 30 days' notice. Continued use after a price change constitutes acceptance of the new pricing.</li>
+      <li><strong style="color:var(--text)">Founding cohort pricing:</strong> Founding member rates are locked for as long as the subscription remains active and in good standing without lapsing.</li>
+    </ul>
+  </div>
+
+  <!-- 8 -->
+  <div class="section" id="s8">
+    <h2>8. Account Termination</h2>
+    <p>Sig5 reserves the right to suspend or terminate your access immediately and without refund if you:</p>
+    <ul>
+      <li>Breach any provision of these Terms</li>
+      <li>Attempt to resell, share, or redistribute your subscription or signal data</li>
+      <li>Use the service in a manner that violates applicable laws or regulations</li>
+      <li>Engage in chargebacks or payment disputes without first contacting support</li>
+      <li>Use automated tools to scrape, replicate, or reverse-engineer the signal system</li>
+    </ul>
+    <p>Upon termination, your webhook will be deactivated and signal delivery will cease immediately.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="section" id="s9">
+    <h2>9. Modifications</h2>
+    <p>We reserve the right to update these Terms at any time. Material changes will be communicated via email to your registered address with at least 14 days' notice. Continued use of the service after the effective date of any changes constitutes your acceptance of the revised Terms.</p>
+    <p>The current version of these Terms is always available at <strong style="color:var(--text)">sig5.io/terms</strong>.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="section" id="s10">
+    <h2>10. Contact</h2>
+    <p>For questions about these Terms or your subscription, contact us at <strong style="color:var(--accent)">support@sig5.io</strong>. We aim to respond within 2 business days.</p>
+  </div>
+
+</div>
+
+<footer>
+  <p><strong style="color:var(--text2)">Risk Disclaimer:</strong> Sig5 is a software tool designed exclusively for use with simulated prop firm evaluation accounts. It is not intended for use with live retail brokerage accounts. Sig5 does not manage, access, or interact with any trading account — it routes webhook signals to a URL you provide. Your subscription constitutes a software API license, not financial advice or investment management services. Sig5 is not a registered investment advisor, commodity trading advisor (CTA), or broker-dealer. Past performance on simulated accounts is not indicative of future results. Trading involves substantial risk of loss. You are solely responsible for ensuring your use of this software complies with all applicable laws in your jurisdiction.</p>
+</footer>
+
+</body>
+</html>
