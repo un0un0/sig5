@@ -346,6 +346,24 @@ let isPaused = false;
 const token = localStorage.getItem('sig5_token') || null;
 const subId = localStorage.getItem('sig5_sub_id') || null;
 
+// Hide subscriber-only UI when viewing as guest (no token)
+if (!token) {
+  document.addEventListener('DOMContentLoaded', function() {
+    var subOnly = ['rerunBtn','killSwitchBtn','chatBtn'];
+    subOnly.forEach(function(id) { var el = document.getElementById(id); if (el) el.style.display = 'none'; });
+    // Hide entire re-run setup card
+    var rerunBtn = document.getElementById('rerunBtn');
+    if (rerunBtn) { var rerunCard = rerunBtn.parentElement; if (rerunCard) rerunCard.style.display = 'none'; }
+    // Hide settings tab entirely
+    document.querySelectorAll('.nav-tab').forEach(function(t) { if (t.textContent.trim() === 'Settings') t.style.display = 'none'; });
+    // Show guest banner
+    var banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(10,21,37,.97);border-top:1px solid rgba(56,189,248,.15);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:13px;color:#8ba8c4';
+    banner.innerHTML = '<span>👁 Viewing <strong style="color:#f0f6fc">subscriber preview</strong> — signal data is live.</span><a href="login.html" style="background:#38bdf8;color:#060d1a;padding:7px 18px;border-radius:6px;font-weight:700;text-decoration:none;font-size:12px;white-space:nowrap">Sign In</a>';
+    document.body.appendChild(banner);
+  });
+}
+
 // Nav tabs
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
