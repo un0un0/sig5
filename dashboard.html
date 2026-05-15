@@ -65,6 +65,9 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
 .outcome-badge.win{background:rgba(52,211,153,.1);color:var(--green)}
 .outcome-badge.loss{background:rgba(248,113,113,.1);color:var(--red)}
 .outcome-badge.open{background:rgba(251,191,36,.1);color:var(--amber)}
+.filter-btn{font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .2s}
+.filter-btn:hover{color:var(--text2);border-color:var(--accent);background:rgba(56,189,248,.06)}
+.filter-btn.active{background:rgba(56,189,248,.15);border-color:var(--accent);color:var(--accent);font-weight:700}
 .dir-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px}
 .dir-badge.buy{background:rgba(52,211,153,.1);color:var(--green)}
 .dir-badge.sell{background:rgba(248,113,113,.1);color:var(--red)}
@@ -697,7 +700,7 @@ async function loadSignalLog() {
       </td></tr>`;
       return;
     }
-    const filteredRows = rows.filter(row => (row.action||'').toLowerCase() !== 'close' && (row.signal_log?.direction || '').toLowerCase() !== 'close');
+    const filteredRows = rows.filter(row => { const dir = (row.signal_log?.direction || row.action || '').toLowerCase(); return dir === 'buy' || dir === 'sell'; });
     if (countEl) countEl.textContent = `${filteredRows.length} signal${filteredRows.length !== 1 ? 's' : ''}`;
     tbody.innerHTML = filteredRows.map(row => {
       const sl = row.signal_log || {};
@@ -705,7 +708,7 @@ async function loadSignalLog() {
       const dir = (sl.direction || '').toLowerCase();
       const dirBadge = dir === 'buy' ? `<span class="dir-badge buy">BUY</span>` : dir === 'sell' ? `<span class="dir-badge sell">SELL</span>` : `<span style="color:var(--text3)">CLOSE</span>`;
       const out = (sl.outcome || '').toUpperCase();
-      const outBadge = out === 'WIN' ? `<span class="outcome-badge win">WIN</span>` : out === 'LOSS' ? `<span class="outcome-badge loss">LOSS</span>` : `<span class="outcome-badge open">OPEN</span>`;
+      const outBadge = out === 'WIN' ? `<span class="outcome-badge win">WIN</span>` : out === 'LOSS' ? `<span class="outcome-badge loss">LOSS</span>` : out === 'OPEN' ? `<span class="outcome-badge open">OPEN</span>` : `<span style="color:var(--text3)">—</span>`;
       const prob = sl.win_probability ? `<span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:${sl.win_probability >= 60 ? 'var(--green)' : sl.win_probability >= 45 ? 'var(--amber)' : 'var(--red)'}">${sl.win_probability}%</span>` : '<span style="color:var(--text3)">—</span>';
       const ack = row.delivered
         ? `<span style="color:var(--green);font-size:12px">✓ ${row.http_status||200}</span>`
