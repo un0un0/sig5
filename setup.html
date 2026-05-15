@@ -77,6 +77,12 @@ input.success{border-color:rgba(52,211,153,.5)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed}
 .btn-back{background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:10px;padding:13px 24px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-back:hover{color:var(--text)}
+.legal-check{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color .2s}
+.legal-check:has(input:checked){border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.04)}
+.legal-check input[type=checkbox]{width:18px;height:18px;flex-shrink:0;margin-top:1px;accent-color:var(--green);cursor:pointer}
+.legal-check-text{font-size:12px;color:var(--text2);line-height:1.6}
+.legal-check-text a{color:var(--accent);text-decoration:none}
+.legal-check-text a:hover{text-decoration:underline}
 
 /* Welcome */
 .welcome-steps{display:flex;flex-direction:column;gap:14px;margin:20px 0 28px}
@@ -234,9 +240,20 @@ input.success{border-color:rgba(52,211,153,.5)}
       ✅ Signals will begin flowing to your webhook as soon as you confirm. Make sure your execution tool is active and ready to receive.
     </div>
 
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px">
+      <label class="legal-check">
+        <input type="checkbox" id="checkJurisdiction" onchange="updateConfirmBtn()">
+        <span class="legal-check-text">I understand that CFD and derivative instruments may be restricted in my jurisdiction, including the United States. I confirm that I am solely responsible for ensuring my use of Sig5 complies with all laws and regulations applicable in my country of residence.</span>
+      </label>
+      <label class="legal-check">
+        <input type="checkbox" id="checkTerms" onchange="updateConfirmBtn()">
+        <span class="legal-check-text">I have read and agree to the <a href="index.html#disclaimer" target="_blank">Terms & Risk Disclaimer</a>. I understand that Sig5 is a software tool only, does not constitute financial advice, and I am solely responsible for my trading decisions.</span>
+      </label>
+    </div>
+
     <div class="btn-row">
       <button class="btn-back" onclick="goStep(4)">← Back</button>
-      <button class="btn-primary" id="confirmBtn" onclick="confirmSetup()">Confirm & Activate →</button>
+      <button class="btn-primary" id="confirmBtn" onclick="confirmSetup()" disabled style="opacity:.5;cursor:not-allowed">Check boxes above to continue →</button>
     </div>
   </div>
 
@@ -411,6 +428,17 @@ function buildSummary() {
   `;
 }
 
+// Legal checkbox gate
+function updateConfirmBtn() {
+  const ok = document.getElementById('checkJurisdiction')?.checked && document.getElementById('checkTerms')?.checked;
+  const btn = document.getElementById('confirmBtn');
+  if (!btn) return;
+  btn.disabled = !ok;
+  btn.style.opacity = ok ? '1' : '.5';
+  btn.style.cursor = ok ? 'pointer' : 'not-allowed';
+  btn.textContent = ok ? 'Confirm & Activate →' : 'Check boxes above to continue →';
+}
+
 // Confirm
 async function confirmSetup() {
   const btn = document.getElementById('confirmBtn');
@@ -419,7 +447,7 @@ async function confirmSetup() {
     const r = await fetch(`${SENTRY}/subscriber/complete-setup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token, drawdown_limit: setupData.dd, webhook_url: setupData.webhook })
+      body: JSON.stringify({ token, drawdown_limit: setupData.dd, webhook_url: setupData.webhook, terms_accepted: true, jurisdiction_acknowledged: true, accepted_at: new Date().toISOString() })
     });
     const data = await r.json();
     if (!data.success) throw new Error(data.error || 'Failed');
