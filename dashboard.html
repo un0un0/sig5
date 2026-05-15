@@ -395,7 +395,7 @@ async function loadTelemetry(){
 // Recent delivery log
 async function loadRecentDeliveries(){
   try {
-  const r = await fetch(`${SB_URL}/rest/v1/signal_delivery_log?select=ticker,action,delivered,http_status,error_msg,attempted_at&order=attempted_at.desc&limit=10`,{headers:HEADERS});
+  const r = await fetch(`${SB_URL}/rest/v1/signal_delivery_log?select=ticker,action,delivered,http_status,error_msg,attempted_at&order=attempted_at.desc&limit=10&action=neq.CLOSE`,{headers:HEADERS});
   const rows = await r.json();
   const tbody = document.getElementById('recentSignals');
   if (!tbody) return;
@@ -680,7 +680,7 @@ async function loadSignalLog() {
   if (!tbody) return;
   tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">Loading…</td></tr>';
   try {
-    let url = `${SB_URL}/rest/v1/signal_delivery_log?subscriber_id=eq.${subId}&select=delivered,http_status,attempted_at,signal_log(ticker,direction,outcome,win_probability,timestamp)&order=attempted_at.desc&limit=500`;
+    let url = `${SB_URL}/rest/v1/signal_delivery_log?subscriber_id=eq.${subId}&select=delivered,http_status,attempted_at,signal_log(ticker,direction,outcome,win_probability,timestamp)&order=attempted_at.desc&limit=500&action=neq.CLOSE`;
     if (signalPeriodDays > 0) {
       const cutoff = new Date(Date.now() - signalPeriodDays * 86400000).toISOString();
       url += `&attempted_at=gte.${cutoff}`;
