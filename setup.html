@@ -370,18 +370,11 @@ async function testWebhook() {
   btn.disabled = true; btn.textContent = 'Testing…';
   hint.textContent = 'Sending connectivity ping…'; hint.className = 'hint';
 
-  // Save webhook URL to Supabase first so Sentry can use it for the test
-  await fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}`, {
-    method: 'PATCH',
-    headers: { apikey: SB_KEY, Authorization: 'Bearer '+SB_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-    body: JSON.stringify({ webhook_url: url })
-  });
-
   try {
     const r = await fetch(`${SENTRY}/subscriber/test`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token })
+      body: JSON.stringify({ token, webhook_url: url })
     });
     const data = await r.json();
     if (data.success) {
