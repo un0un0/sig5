@@ -257,6 +257,28 @@ input.success{border-color:rgba(52,211,153,.5)}
     </div>
   </div>
 
+  <!-- STEP 6 — DISCORD (optional) -->
+  <div class="card" id="step6" style="display:none">
+    <div class="step-badge">Step 6 of 6</div>
+    <h2>Join the Discord <span style="font-size:13px;font-weight:400;color:var(--text3)">(optional)</span></h2>
+    <div class="card-sub">Connect your Discord account to get access to the subscriber-only channels — #signal-feed, #support, and #general. You can skip this and connect later from your dashboard settings.</div>
+
+    <div class="field" style="margin-top:24px">
+      <label>Your Discord User ID</label>
+      <input type="text" id="setupDiscordId" placeholder="e.g. 123456789012345678" style="font-family:'JetBrains Mono',monospace"/>
+      <div style="font-size:11px;color:var(--text3);margin-top:6px;line-height:1.6">To find it: Discord → Settings → Advanced → enable <strong>Developer Mode</strong> → right-click your username → <strong>Copy User ID</strong></div>
+      <div style="font-size:11px;color:rgba(251,191,36,.7);margin-top:8px;display:flex;align-items:flex-start;gap:6px;line-height:1.6"><span>⚠</span><span>Once linked, your Discord account cannot be changed. Each subscription is tied to one Discord account permanently. Contact support@sig5.io if you need assistance.</span></div>
+    </div>
+
+    <div id="setupDiscordStatus" style="font-size:13px;margin:12px 0;min-height:20px"></div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep(5)">← Back</button>
+      <button class="btn-primary" id="discordSetupBtn" onclick="setupConnectDiscord()">Connect Discord →</button>
+      <button onclick="skipDiscord()" style="background:transparent;border:none;color:var(--text3);font-size:13px;cursor:pointer;padding:11px 16px;font-family:'Space Grotesk',sans-serif">Skip →</button>
+    </div>
+  </div>
+
   <!-- STEP 6: DONE -->
   <div class="card" id="step6">
     <div style="text-align:center;padding:20px 0">
@@ -425,6 +447,35 @@ function buildSummary() {
 // Cancel setup — set skip flag and go to dashboard
 function cancelSetup() {
   sessionStorage.setItem('skip_setup', '1');
+  window.location.href = 'dashboard.html';
+}
+
+// Discord step functions
+async function setupConnectDiscord() {
+  const discordId = (document.getElementById('setupDiscordId')?.value||'').trim();
+  const statusEl  = document.getElementById('setupDiscordStatus');
+  const btn       = document.getElementById('discordSetupBtn');
+  if (!discordId) { if(statusEl) statusEl.textContent='⚠ Enter your Discord User ID first'; return; }
+  if (!/^\d{17,20}$/.test(discordId)) { if(statusEl) statusEl.textContent='⚠ Invalid ID — should be 17-20 digits'; return; }
+  btn.disabled=true; btn.textContent='Connecting…'; if(statusEl) statusEl.textContent='';
+  try {
+    const r = await fetch(`${SENTRY}/subscriber/discord-connect`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token,discord_user_id:discordId})});
+    const data = await r.json();
+    if (data.success) {
+      if(statusEl) statusEl.innerHTML='<span style="color:var(--green)">✓ Connected! Check Discord for your Subscriber role.</span>';
+      btn.textContent='✓ Connected';
+      setTimeout(()=>{ window.location.href='dashboard.html'; }, 2000);
+    } else {
+      if(statusEl) statusEl.textContent='✗ '+(data.error||'Failed — you can connect later from Settings');
+      btn.disabled=false; btn.textContent='Try Again';
+    }
+  } catch(e) {
+    if(statusEl) statusEl.textContent='✗ Could not connect — skip and connect from Settings later';
+    btn.disabled=false; btn.textContent='Try Again';
+  }
+}
+
+function skipDiscord() {
   window.location.href = 'dashboard.html';
 }
 
