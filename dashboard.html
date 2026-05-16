@@ -771,11 +771,19 @@ if (token) {
 }
 // Pre-populate DD input and subscriber instrument config
 if (token && subId) {
-  fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}&select=drawdown_limit`, { headers: HEADERS })
+  fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}&select=drawdown_limit,discord_user_id`, { headers: HEADERS })
     .then(r=>r.json()).then(d => {
       if (d[0]?.drawdown_limit) {
         document.getElementById('ddInput').value = d[0].drawdown_limit;
         updateLotTable();
+      }
+      if (d[0]?.discord_user_id) {
+        const el = document.getElementById('discordUserIdInput');
+        const st = document.getElementById('discordStatus');
+        if (el) el.value = d[0].discord_user_id;
+        if (st) st.innerHTML = '<span style="color:var(--green)">✓ Already connected</span>';
+        const btn = document.getElementById('discordConnectBtn');
+        if (btn) btn.textContent = 'Update';
       }
     }).catch(()=>{});
   fetch(`${SB_URL}/rest/v1/subscriber_instrument_config?subscriber_id=eq.${subId}&select=sig5_ticker,broker_symbol,lot_divisor`, { headers: HEADERS })
