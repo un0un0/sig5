@@ -104,9 +104,9 @@ nav{position:sticky;top:0;z-index:100;padding:14px 32px;display:flex;align-items
   <div class="nav-right">
     <div class="user-pill">
       <span class="user-dot"></span>
-      <span class="user-email">trader@email.com</span>
+      <span class="user-email" id="userEmail">—</span>
     </div>
-    <button class="signout-btn" onclick="window.location.href='login.html'">Sign out</button>
+    <button class="signout-btn" onclick="localStorage.removeItem('sig5_email');window.location.href='login.html'">Sign out</button>
   </div>
 </nav>
 
@@ -345,6 +345,8 @@ const INSTRUMENTS=['US30','NAS100','US500','JPN225','GER40','BTCUSD','XAUUSD','X
 let isPaused = false;
 const token = localStorage.getItem('sig5_token') || null;
 const subId = localStorage.getItem('sig5_sub_id') || null;
+const storedEmail = localStorage.getItem('sig5_email') || null;
+if (storedEmail) { const el = document.getElementById('userEmail'); if (el) el.textContent = storedEmail; }
 
 // Hide subscriber-only UI when viewing as guest (no token)
 if (!token) {
