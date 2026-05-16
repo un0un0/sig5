@@ -760,10 +760,12 @@ if (!token) {
 
 // Check setup_complete — redirect to setup.html if not done
 if (token) {
-  fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}&select=setup_complete`,{headers:HEADERS})
-    .then(r=>r.json())
-    .then(d=>{ if(d[0]&&d[0].setup_complete===false) window.location.href='setup.html'; })
-    .catch(()=>{});
+  if (!sessionStorage.getItem('skip_setup')) {
+    fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}&select=setup_complete`,{headers:HEADERS})
+      .then(r=>r.json())
+      .then(d=>{ if(d[0]&&d[0].setup_complete===false) window.location.href='setup.html'; })
+      .catch(()=>{});
+  }
 }
 // Pre-populate DD input and subscriber instrument config
 if (token && subId) {

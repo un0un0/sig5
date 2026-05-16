@@ -101,7 +101,7 @@ input.success{border-color:rgba(52,211,153,.5)}
     <div class="logo-mark">S5</div>
     <span class="logo-text">SIG<span>5</span></span>
   </a>
-  <a href="dashboard.html" id="cancelLink" style="font-size:13px;color:var(--text3);text-decoration:none">← Back to Dashboard</a>
+  <a href="#" id="cancelLink" onclick="cancelSetup()" style="font-size:13px;color:var(--text3);text-decoration:none;display:block">← Back to Dashboard</a>
 </nav>
 
 <div class="main">
@@ -422,6 +422,12 @@ function buildSummary() {
   `;
 }
 
+// Cancel setup — set skip flag and go to dashboard
+function cancelSetup() {
+  sessionStorage.setItem('skip_setup', '1');
+  window.location.href = 'dashboard.html';
+}
+
 // Legal checkbox gate
 function updateConfirmBtn() {
   const ok = document.getElementById('checkJurisdiction')?.checked && document.getElementById('checkTerms')?.checked;
@@ -568,7 +574,6 @@ fetch(`${SB_URL}/rest/v1/subscribers?token=eq.${token}&select=id,drawdown_limit,
     updateLotTable();
   }
   if (d[0]?.setup_complete) {
-    document.getElementById('cancelLink').style.display = 'block';
     document.querySelector('#step1 .card-sub').textContent = 'You\'re re-running setup. Your previous values have been pre-populated. Complete all steps to update your settings, or click Back to Dashboard to cancel.';
   }
   // Pre-populate instrument config if exists
