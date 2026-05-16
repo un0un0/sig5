@@ -358,12 +358,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 
 <!-- STATS STRIP -->
 <div class="stats-strip">
-  <div class="stat-item"><span class="stat-num green">65.3%</span><span class="stat-lbl">Live Win Rate</span></div>
+  <div class="stat-item"><span class="stat-num green" id="statWinRate">65.3%</span><span class="stat-lbl">Live Win Rate</span></div>
   <div class="stat-item"><span class="stat-num">$700K+</span><span class="stat-lbl">Portfolio Size</span></div>
   <div class="stat-item"><span class="stat-num">8</span><span class="stat-lbl">Instruments</span></div>
   <div class="stat-item"><span class="stat-num amber">Mar 2026</span><span class="stat-lbl">Live Since</span></div>
   <div class="stat-item">
-    <span class="stat-num">1.28%</span>
+    <span class="stat-num" id="statMaxDD">1.28%</span>
     <span class="stat-lbl" style="display:flex;align-items:center;justify-content:center;gap:5px">Max DD
       <span class="tip-wrap"><span class="tip-icon">?</span><span class="tip-box">Based on ~1% risk per trade. Your actual drawdown depends on your own position sizing.</span></span>
     </span>
@@ -401,6 +401,46 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
     const ticker = document.getElementById('liveTicker');
     if (ticker) ticker.innerHTML = items + items;
   } catch(e){ console.warn('Live tape failed:', e.message); }
+})();
+
+// Live stats — win rate + max DD (same source as track-record.html)
+(async function loadLiveStats(){
+  try {
+    const HEADERS = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY };
+
+    const [signalsRaw, snapsRaw] = await Promise.all([
+      fetch(SB_URL + '/rest/v1/signal_log?select=outcome&decision=eq.ALLOW&outcome=in.(WIN,LOSS)&limit=5000', { headers: HEADERS }).then(r=>r.json()),
+      fetch(SB_URL + '/rest/v1/balance_snapshots?select=account_id,balance,timestamp&order=timestamp.asc&limit=5000', { headers: HEADERS }).then(r=>r.json())
+    ]);
+
+    // Win rate
+    const wins = (signalsRaw||[]).filter(s=>s.outcome==='WIN').length;
+    const total = (signalsRaw||[]).length;
+    if (total > 0) {
+      const wr = (wins/total*100).toFixed(1);
+      const wrEl = document.getElementById('statWinRate');
+      if (wrEl) wrEl.textContent = wr + '%';
+    }
+
+    // Max DD from balance snapshots
+    const snapsByAccount = {};
+    (snapsRaw||[]).forEach(s => {
+      if (!snapsByAccount[s.account_id]) snapsByAccount[s.account_id] = [];
+      snapsByAccount[s.account_id].push(s);
+    });
+    let portfolioMaxDD = 0;
+    Object.values(snapsByAccount).forEach(snaps => {
+      let peak = snaps[0]?.balance || 0;
+      snaps.forEach(s => {
+        if (s.balance > peak) peak = s.balance;
+        const dd = peak > 0 ? (peak - s.balance) / peak * 100 : 0;
+        if (dd > portfolioMaxDD) portfolioMaxDD = dd;
+      });
+    });
+    const ddEl = document.getElementById('statMaxDD');
+    if (ddEl && portfolioMaxDD > 0) ddEl.textContent = portfolioMaxDD.toFixed(2) + '%';
+
+  } catch(e) { console.warn('Live stats failed:', e.message); }
 })();
 </script>
 
