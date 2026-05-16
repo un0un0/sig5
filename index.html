@@ -377,9 +377,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
   </div>
 </div>
 <script>
+const SB_URL = 'https://hefsyjljufetlgnccdqf.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZnN5amxqdWZldGxnbmNjZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDQ1OTIsImV4cCI6MjA4OTM4MDU5Mn0.zCsbFdWD1nMo-Czco5UaBgw7roliZQ3iQv4XVLDOtbs';
 (async function initLiveTape(){
-  const SB_URL = 'https://hefsyjljufetlgnccdqf.supabase.co';
-  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZnN5amxqdWZldGxnbmNjZHFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDQ1OTIsImV4cCI6MjA4OTM4MDU5Mn0.zCsbFdWD1nMo-Czco5UaBgw7roliZQ3iQv4XVLDOtbs';
   try {
     // 5-min delay — public facing
     const cutoff = new Date(Date.now() - 5*60*1000).toISOString();
@@ -409,13 +409,14 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
     const HEADERS = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY };
 
     const [signalsRaw, snapsRaw] = await Promise.all([
-      fetch(SB_URL + '/rest/v1/signal_log?select=outcome&decision=eq.ALLOW&outcome=in.(WIN,LOSS)&limit=5000', { headers: HEADERS }).then(r=>r.json()),
+      fetch(SB_URL + '/rest/v1/signal_log?select=outcome&decision=eq.ALLOW&direction=neq.close&limit=5000', { headers: HEADERS }).then(r=>r.json()),
       fetch(SB_URL + '/rest/v1/balance_snapshots?select=account_id,balance,timestamp&order=timestamp.asc&limit=5000', { headers: HEADERS }).then(r=>r.json())
     ]);
 
-    // Win rate
-    const wins = (signalsRaw||[]).filter(s=>s.outcome==='WIN').length;
-    const total = (signalsRaw||[]).length;
+    // Win rate — filter resolved only in JS
+    const resolved = (signalsRaw||[]).filter(s=>s.outcome==='WIN'||s.outcome==='LOSS');
+    const wins = resolved.filter(s=>s.outcome==='WIN').length;
+    const total = resolved.length;
     if (total > 0) {
       const wr = (wins/total*100).toFixed(1);
       const wrEl = document.getElementById('statWinRate');
@@ -440,7 +441,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
     const ddEl = document.getElementById('statMaxDD');
     if (ddEl && portfolioMaxDD > 0) ddEl.textContent = portfolioMaxDD.toFixed(2) + '%';
 
-  } catch(e) { console.warn('Live stats failed:', e.message); }
+  } catch(e) { console.error('Live stats failed:', e.message, e); }
 })();
 </script>
 
