@@ -465,6 +465,65 @@ function drawCurve(canvasId, dataPoints, color, height, timestamps, rawBalances)
 }
 
 // Portfolio combined curve — bucket by date, sum balances
+function populatePortfolioWidget(snapsByAccount) {
+  const acctIds = Object.keys(snapsByAccount);
+  if (!acctIds.length) return;
+
+  let totalCurrent = 0, totalStart = 0, totalPeak = 0;
+  acctIds.forEach(id => {
+    const snaps = [...snapsByAccount[id]].sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
+    if (!snaps.length) return;
+    totalStart   += parseFloat(snaps[0].balance);
+    totalCurrent += parseFloat(snaps[snaps.length-1].balance);
+    const peak = Math.max(...snaps.map(s=>parseFloat(s.balance)));
+    totalPeak += peak;
+  });
+
+  const pnl    = totalCurrent - totalStart;
+  const maxDD  = totalPeak > 0 ? (totalPeak - totalCurrent) / totalPeak * 100 : 0;
+  const ddColor = maxDD < 1 ? '#22c55e' : maxDD < 3 ? '#f59e0b' : '#ef4444';
+
+  const totalEl = document.getElementById('pwTotal');
+  if (totalEl) totalEl.textContent = '$' + Math.round(totalCurrent/1000) + 'K+';
+  const acctEl = document.getElementById('pwAccounts');
+  if (acctEl) acctEl.textContent = acctIds.length + ' funded accounts';
+  const pnlEl = document.getElementById('pwPnl');
+  if (pnlEl) { pnlEl.textContent = (pnl>=0?'+$':'-$') + Math.abs(Math.round(pnl)).toLocaleString(); pnlEl.style.color = pnl>=0?'var(--green)':'var(--red)'; }
+  const pnlSubEl = document.getElementById('pwPnlSub');
+  if (pnlSubEl) { const pct=(pnl/totalStart*100).toFixed(2); pnlSubEl.textContent=(pnl>=0?'+':'')+pct+'% since tracking began'; }
+  const ddEl = document.getElementById('pwDD');
+  if (ddEl) { ddEl.textContent = maxDD.toFixed(2)+'%'; ddEl.style.color = ddColor; }
+
+  // Mini equity curve
+  const allDates = [...new Set(acctIds.flatMap(id => snapsByAccount[id].map(s=>s.timestamp.slice(0,10))))].sort();
+  const combined = [], usedDates = [], lastKnown = {};
+  allDates.forEach(date => {
+    acctIds.forEach(id => {
+      const snap = snapsByAccount[id].filter(s=>s.timestamp.slice(0,10)<=date).sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp))[0];
+      if (snap) lastKnown[id] = parseFloat(snap.balance);
+    });
+    if (Object.keys(lastKnown).length > 0) {
+      combined.push(Object.values(lastKnown).reduce((s,v)=>s+v,0));
+      usedDates.push(date+'T12:00:00Z');
+    }
+  });
+
+  if (combined.length < 2) return;
+
+  requestAnimationFrame(() => {
+    const canvas = document.getElementById('pwCanvas');
+    if (!canvas) return;
+    canvas.style.height = '160px';
+    drawCurve('pwCanvas', combined.map(v=>v/combined[0]*100), '#38bdf8', 160, usedDates);
+  });
+
+  const subEl = document.getElementById('pwChartSub');
+  if (subEl) {
+    const ret = (combined[combined.length-1]-combined[0])/combined[0]*100;
+    subEl.textContent = 'Combined portfolio equity · '+acctIds.length+' accounts · '+(ret>=0?'+':'')+ret.toFixed(2)+'% return';
+  }
+}
+
 function buildPortfolioCurve(snapsByAccount) {
   const acctIds = Object.keys(snapsByAccount);
   if (!acctIds.length) return;
@@ -641,7 +700,7 @@ function buildInstGrid(resolved) {
 async function loadAll() {
   const [snapsRaw, signalsRaw] = await Promise.all([
     sb('/rest/v1/balance_snapshots?select=account_id,balance,timestamp&order=timestamp.asc&limit=5000'),
-    sb('/rest/v1/signal_log?select=ticker,direction,outcome,timestamp&decision=eq.ALLOW&order=timestamp.desc&limit=1000')
+    sb('/rest/v1/signal_log?select=ticker,direction,outcome,timestamp&decision=eq.ALLOW&order=timestamp.desc&limit=5000')
   ]);
 
   const snapsByAccount = {};
@@ -676,9 +735,24 @@ async function loadAll() {
     document.getElementById('accumMsg').textContent = ' — Statistics become more meaningful with a larger sample. Live since March 2026.';
   }
 
+  populatePortfolioWidget(snapsByAccount);
   buildAccountCards(snapsByAccount);
   renderTradeTable('all');
   buildInstGrid(resolvedTrades);
+
+  // Compute live portfolio max DD from balance snapshots
+  let portfolioMaxDD = 0;
+  Object.values(snapsByAccount).forEach(snaps => {
+    if (!snaps.length) return;
+    let peak = snaps[0].balance;
+    snaps.forEach(s => {
+      if (s.balance > peak) peak = s.balance;
+      const dd = peak > 0 ? (peak - s.balance) / peak * 100 : 0;
+      if (dd > portfolioMaxDD) portfolioMaxDD = dd;
+    });
+  });
+  const ddEl = document.getElementById('statDD');
+  if (ddEl) ddEl.textContent = portfolioMaxDD > 0 ? portfolioMaxDD.toFixed(2) + '%' : '0.00%';
 }
 
 loadAll().catch(e => console.warn('Track record error:', e));
