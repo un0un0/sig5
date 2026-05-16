@@ -29,6 +29,14 @@ nav{position:sticky;top:0;z-index:100;padding:18px 40px;display:flex;align-items
 .verified-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;color:var(--green);letter-spacing:.5px;margin-top:16px}
 /* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:32px}
+.portfolio-widget{background:linear-gradient(135deg,rgba(30,58,95,.6),rgba(10,21,37,.8));border:1px solid rgba(56,189,248,.2);border-radius:16px;padding:28px 32px;margin-bottom:28px;position:relative;overflow:hidden}
+.portfolio-widget::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(56,189,248,.5),transparent)}
+.portfolio-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.portfolio-tile{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:16px 18px}
+.portfolio-tile .pt-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:8px}
+.portfolio-tile .pt-value{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600;line-height:1}
+.portfolio-tile .pt-sub{font-size:11px;color:var(--text3);margin-top:5px}
+@media(max-width:600px){.portfolio-tiles{grid-template-columns:repeat(2,1fr)}}
 .stat-block{background:var(--surface);padding:22px 24px}
 .stat-block .label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px}
 .stat-block .value{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:500;color:var(--accent)}
@@ -150,6 +158,36 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:40
       <span style="font-size:13px;font-weight:600;color:var(--amber)" id="accumTitle">Track record accumulating</span>
       <span style="font-size:13px;color:var(--text2)" id="accumMsg"> — Live since March 19, 2026. Statistics become more meaningful as resolved trades accumulate.</span>
     </div>
+  </div>
+
+  <!-- PORTFOLIO WIDGET -->
+  <div class="portfolio-widget">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(56,189,248,.7);margin-bottom:6px">Live Portfolio</div>
+    <div style="font-size:13px;color:var(--text3);margin-bottom:24px">The same signals delivered to subscribers are running live across our funded prop firm accounts — right now.</div>
+    <div class="portfolio-tiles">
+      <div class="portfolio-tile">
+        <div class="pt-label">Active Portfolio</div>
+        <div class="pt-value" style="color:var(--accent)" id="pwTotal"><div class="skeleton" style="width:90px;height:28px"></div></div>
+        <div class="pt-sub" id="pwAccounts">loading…</div>
+      </div>
+      <div class="portfolio-tile">
+        <div class="pt-label">Live P&amp;L</div>
+        <div class="pt-value" style="color:var(--green)" id="pwPnl"><div class="skeleton" style="width:80px;height:28px"></div></div>
+        <div class="pt-sub" id="pwPnlSub">since tracking began</div>
+      </div>
+      <div class="portfolio-tile">
+        <div class="pt-label">Max Drawdown</div>
+        <div class="pt-value" id="pwDD"><div class="skeleton" style="width:60px;height:28px"></div></div>
+        <div class="pt-sub">across all accounts</div>
+      </div>
+      <div class="portfolio-tile">
+        <div class="pt-label">Funded Since</div>
+        <div class="pt-value" style="color:var(--text2);font-size:20px">Mar 2026</div>
+        <div class="pt-sub">prop firm evaluations</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:8px" id="pwChartSub">Combined portfolio equity — all accounts</div>
+    <canvas id="pwCanvas" style="width:100%;height:160px;display:block"></canvas>
   </div>
 
   <!-- LIVE STATS GRID -->
